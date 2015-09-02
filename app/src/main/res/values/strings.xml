@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">JoggingTrackerapp</string>
+    <string name="jogging_times">Jogging Times</string>
+
+    <string name="email">Email</string>
+    <string name="pass">********</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
+
+    <string-array name="levels_array">
+        <item>Admin</item>
+        <item>Users Manager</item>
+        <item>User</item>
+    </string-array>
+
+
+</resources>
