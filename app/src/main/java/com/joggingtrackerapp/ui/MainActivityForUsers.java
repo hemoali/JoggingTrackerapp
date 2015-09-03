@@ -56,6 +56,17 @@ public class MainActivityForUsers extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    public void editRecordInLV (Time t, String positionStr) {
+        int position = Integer.parseInt(positionStr);
+        Time oldTime = allTimes.get(position);
+        oldTime.setDate(t.getDate());
+        oldTime.setTime(t.getTime());
+        oldTime.setDistance(t.getDistance());
+        allTimes.set(position, oldTime);
+        adapter.notifyDataSetChanged();
+
+    }
+
     public static void fillTimesListView (ArrayList<Time> allTimes) {
         MainActivityForUsers.allTimes = allTimes;
         adapter = new TimesAdapter(activity, allTimes);
@@ -118,4 +129,6 @@ public class MainActivityForUsers extends AppCompatActivity {
     public static void dismissAddTimeDialog () {
         addTimeDialog.dismiss();
     }
+
+
 }

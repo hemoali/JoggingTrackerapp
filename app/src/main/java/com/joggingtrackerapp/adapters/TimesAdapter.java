@@ -3,6 +3,7 @@ package com.joggingtrackerapp.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,13 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.server.DeleteTime;
+import com.joggingtrackerapp.server.EditTime;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -29,6 +35,7 @@ public class TimesAdapter extends BaseAdapter {
     private Context context;
     private static ArrayList<Time> allTimes;
     private boolean stopAnimation = false;
+    private AlertDialog editTimeDialog;
 
     public TimesAdapter (Context c, ArrayList<Time> allTimes) {
         context = c;
@@ -173,6 +180,52 @@ public class TimesAdapter extends BaseAdapter {
             }
         });
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_time, null);
+                AlertDialog.Builder addTimeDialogBuilder = new AlertDialog.Builder(context);
+                addTimeDialogBuilder.setView(view);
+                addTimeDialogBuilder.setCancelable(true);
+
+                // Listeners
+                Button editItem = (Button) view.findViewById(R.id.addItem);
+                editItem.setText("Edit");
+                Button cancel = (Button) view.findViewById(R.id.cancel);
+                final EditText time = (EditText) view.findViewById(R.id.time);
+                final EditText distance = (EditText) view.findViewById(R.id.distance);
+                final DatePicker date = (DatePicker) view.findViewById(R.id.date);
+
+                time.setText(currentTime.getTime());
+                distance.setText(currentTime.getDistance());
+                date.init(Integer.parseInt(currentTime.getDate().substring(0, 4)),
+                        Integer.parseInt(currentTime.getDate().substring(5, 7)),
+                        Integer.parseInt(currentTime.getDate().substring(8, 10)), null);
+
+                editItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        String timeStr = time.getText().toString().trim();
+                        String distanceStr = distance.getText().toString().trim();
+                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDayOfMonth());
+                        if (timeStr.equals("") || timeStr == null || distanceStr.equals("") || distanceStr == null ||
+                                dateStr.trim().equals("") || dateStr == null) {
+                            Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            new EditTime(context, editTimeDialog).execute(dateStr, timeStr, distanceStr, currentTime.getId(), String.valueOf(position));
+                        }
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        editTimeDialog.dismiss();
+                    }
+                });
+                editTimeDialog = addTimeDialogBuilder.show();
+            }
+        });
         // Animation
         if (!stopAnimation) {
             ObjectAnimator addHolderAnimationY = ObjectAnimator.ofFloat(
