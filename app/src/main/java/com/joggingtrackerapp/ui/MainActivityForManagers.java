@@ -16,6 +16,9 @@ public class MainActivityForManagers extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
         setContentView(R.layout.activity_main_for_managers);
     }
 
