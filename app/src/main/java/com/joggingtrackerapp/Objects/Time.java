@@ -1,5 +1,7 @@
 package com.joggingtrackerapp.Objects;
 
+import com.joggingtrackerapp.utils.Utils;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,15 @@ import java.io.Serializable;
  */
 public class Time implements Serializable {
     String id, user_id, date, time, distance;
+    boolean optionsVisible = false;
+
+    public boolean isOptionsVisible () {
+        return optionsVisible;
+    }
+
+    public void setOptionsVisible (boolean optionsVisible) {
+        this.optionsVisible = optionsVisible;
+    }
 
     public String getId () {
         return id;
@@ -46,5 +57,13 @@ public class Time implements Serializable {
 
     public void setDistance (String distance) {
         this.distance = distance;
+    }
+
+    public String getSpeed () {
+        int dis = Integer.parseInt(getDistance());
+        int time = Integer.parseInt(getTime());
+        float speed = (float) dis / time;
+
+        return String.valueOf(Utils.round(speed, 2));
     }
 }
