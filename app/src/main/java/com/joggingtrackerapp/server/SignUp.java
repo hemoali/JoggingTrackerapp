@@ -144,7 +144,10 @@ public class SignUp extends AsyncTask<String, Void, String> {
         }
         super.onPostExecute(result);
     }
-    public void stop(){
+
+    public void stop () {
         onPostExecute(null);
+        this.cancel(true);
+
     }
 }

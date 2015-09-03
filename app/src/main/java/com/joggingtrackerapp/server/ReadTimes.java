@@ -115,7 +115,7 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
             Log.d(TAG_DEBUG, result);
             ArrayList<Time> allTimes = Parse.parseTimes(context, result);
             if (context instanceof MainActivityForUsers) {
-                ((MainActivityForUsers) context).fillTimesListView(allTimes);
+                ((MainActivityForUsers) context).fillTimesListView(allTimes, false);
             }
         }
 
@@ -124,5 +124,7 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
 
     public void stop () {
         onPostExecute(null);
+        this.cancel(true);
+
     }
 }

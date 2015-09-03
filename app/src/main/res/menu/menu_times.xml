@@ -6,4 +6,10 @@
         android:orderInCategory="10"
         android:title="@string/menu_add_item"
         joggingtrackerapp:showAsAction="always" />
+    <item
+        android:id="@+id/menu_filter_by_date"
+        android:icon="@drawable/ic_menu_filter"
+        android:orderInCategory="10"
+        android:title="@string/menu_filter"
+        joggingtrackerapp:showAsAction="always" />
 </menu>

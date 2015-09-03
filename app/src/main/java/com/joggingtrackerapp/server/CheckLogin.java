@@ -148,5 +148,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
 
     public void stop () {
         onPostExecute(null);
+        this.cancel(true);
+
     }
 }

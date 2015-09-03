@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class MainActivityForUsers extends AppCompatActivity {
     private static TimesAdapter adapter;
     private static Activity activity;
     private static ArrayList<Time> allTimes;
-    private static AlertDialog addTimeDialog;
+    private static AlertDialog addTimeDialog, filterTimesDialog;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -67,8 +68,10 @@ public class MainActivityForUsers extends AppCompatActivity {
 
     }
 
-    public static void fillTimesListView (ArrayList<Time> allTimes) {
-        MainActivityForUsers.allTimes = allTimes;
+    public static void fillTimesListView (ArrayList<Time> allTimes, boolean filterEnabled) {
+        if (!filterEnabled)
+            MainActivityForUsers.allTimes = allTimes;
+
         adapter = new TimesAdapter(activity, allTimes);
         listview_times.setAdapter(adapter);
     }
@@ -120,6 +123,75 @@ public class MainActivityForUsers extends AppCompatActivity {
                     }
                 });
                 addTimeDialog = addTimeDialogBuilder.show();
+                return true;
+            case R.id.menu_filter_by_date:
+                View filterView = getLayoutInflater().inflate(R.layout.dialog_filter_times, null);
+
+                AlertDialog.Builder filterTimesDialogBuilder = new AlertDialog.Builder(this);
+                filterTimesDialogBuilder.setView(filterView);
+                filterTimesDialogBuilder.setCancelable(true);
+
+                // Listeners
+                Button filterItems = (Button) filterView.findViewById(R.id.filter);
+                Button cancelFilter = (Button) filterView.findViewById(R.id.cancel);
+                Button resetFilter = (Button) filterView.findViewById(R.id.reset);
+                final ImageView switchDatePicker = (ImageView) filterView.findViewById(R.id.switchDatePicker);
+                final DatePicker fromDate = (DatePicker) filterView.findViewById(R.id.fromDate);
+                final DatePicker toDate = (DatePicker) filterView.findViewById(R.id.toDate);
+
+
+                switchDatePicker.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        if (fromDate.getVisibility() == View.VISIBLE) {
+                            switchDatePicker.setImageResource(R.drawable.to_enabled_check);
+                            fromDate.setVisibility(View.GONE);
+                            toDate.setVisibility(View.VISIBLE);
+                        } else {
+                            switchDatePicker.setImageResource(R.drawable.from_enabled_check);
+                            fromDate.setVisibility(View.VISIBLE);
+                            toDate.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                filterItems.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        String fromDateStr = fromDate.getYear() + "-" + String.format("%02d", fromDate.getMonth()) + "-" + String.format("%02d", fromDate.getDayOfMonth());
+                        String toDateStr = toDate.getYear() + "-" + String.format("%02d", toDate.getMonth()) + "-" + String.format("%02d", toDate.getDayOfMonth());
+                        if (toDateStr.equals("") || toDateStr == null ||
+                                fromDateStr.trim().equals("") || fromDateStr == null) {
+                            Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
+
+                        } else if (fromDateStr.compareTo(toDateStr) > 0) {
+                            Toast.makeText(activity, "'From' Date Must Be Before 'To' Date", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ArrayList<Time> filteredItems = new ArrayList<Time>();
+                            for (Time t : allTimes) {
+                                String date = t.getDate();
+                                if (date.compareTo(fromDateStr) >= 0 && date.compareTo(toDateStr) <= 0) {
+                                    filteredItems.add(t);
+                                }
+                            }
+                            fillTimesListView(filteredItems, true);
+                            filterTimesDialog.dismiss();
+                        }
+                    }
+                });
+                cancelFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        filterTimesDialog.dismiss();
+                    }
+                });
+                resetFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        fillTimesListView(allTimes, false);
+                        filterTimesDialog.dismiss();
+                    }
+                });
+                filterTimesDialog = filterTimesDialogBuilder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
