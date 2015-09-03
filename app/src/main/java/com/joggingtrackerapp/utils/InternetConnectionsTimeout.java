@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 
 import com.joggingtrackerapp.server.CheckLogin;
+import com.joggingtrackerapp.server.DeleteTime;
 import com.joggingtrackerapp.server.ReadTimes;
 import com.joggingtrackerapp.server.SignUp;
 
@@ -26,6 +27,8 @@ public class InternetConnectionsTimeout {
                     ((CheckLogin) asyncTask).stop();
                 } else if (asyncTask instanceof ReadTimes) {
                     ((ReadTimes) asyncTask).stop();
+                } else if (asyncTask instanceof DeleteTime) {
+                    ((DeleteTime) asyncTask).stop();
                 }
             }
         };

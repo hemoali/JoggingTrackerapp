@@ -52,6 +52,20 @@ public class Parse {
         return loginData;
     }
 
+    public static String[] parseDeleteTimeData (String result) {
+        String[] deleteData = new String[2];
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+
+            deleteData[0] = jsonObj.getString("status");
+            deleteData[1] = jsonObj.getString("status_message");
+
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return deleteData;
+    }
+
     public static ArrayList<Time> parseTimes (Context context, String result) {
         ArrayList<Time> times = new ArrayList<>();
         try {

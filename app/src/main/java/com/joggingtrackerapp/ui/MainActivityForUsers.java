@@ -22,6 +22,7 @@ public class MainActivityForUsers extends AppCompatActivity {
     private static ListView listview_times;
     private static TimesAdapter adapter;
     private static Activity activity;
+    private static ArrayList<Time> allTimes;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -37,7 +38,13 @@ public class MainActivityForUsers extends AppCompatActivity {
 
     }
 
+    public static void removeRecordFromLV (int position) {
+        allTimes.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
     public static void fillTimesListView (ArrayList<Time> allTimes) {
+        MainActivityForUsers.allTimes = allTimes;
         adapter = new TimesAdapter(activity, allTimes);
         listview_times.setAdapter(adapter);
     }

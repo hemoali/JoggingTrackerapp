@@ -3,7 +3,9 @@ package com.joggingtrackerapp.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
+import com.joggingtrackerapp.server.DeleteTime;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -139,6 +142,27 @@ public class TimesAdapter extends BaseAdapter {
             }
         });
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context).setIconAttribute(android.R.attr.alertDialogIcon)
+                        .setTitle("Are you sure?")
+                        .setMessage("This record will be deleted.").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick (DialogInterface dialog, int which) {
+                                new DeleteTime(context, position).execute(currentTime.getId());
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick (DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).setCancelable(false);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
 
         // Animation
         ObjectAnimator addHolderAnimationY = ObjectAnimator.ofFloat(
