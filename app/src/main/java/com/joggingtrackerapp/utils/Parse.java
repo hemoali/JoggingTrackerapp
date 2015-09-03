@@ -1,11 +1,19 @@
 package com.joggingtrackerapp.utils;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.joggingtrackerapp.Objects.Time;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
+
 /**
  * Created by ibrahim on 6/23/15.
  */
@@ -26,6 +34,7 @@ public class Parse {
         }
         return loginData;
     }
+
     public static String[] parseLoginData (String result) {
         String[] loginData = new String[5];
         try {
@@ -42,11 +51,40 @@ public class Parse {
         }
         return loginData;
     }
+
+    public static ArrayList<Time> parseTimes (Context context, String result) {
+        ArrayList<Time> times = new ArrayList<>();
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+            String status = jsonObj.getString("status");
+            if (status.equals("200")) {
+                JSONArray timesJson = jsonObj.getJSONArray("data");
+                for (int i = 0; i < timesJson.length(); i++) {
+                    Time time = new Time();
+
+                    JSONObject timeJson = timesJson.getJSONObject(i);
+                    time.setDate(timeJson.getString("date"));
+                    time.setId(timeJson.getString("id"));
+                    time.setUser_id(timeJson.getString("user_id"));
+                    time.setTime(timeJson.getString("time"));
+                    time.setDistance(timeJson.getString("distance"));
+                    times.add(time);
+                }
+            } else {
+                Toast.makeText(context, jsonObj.getString("status_message"), Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return times;
+    }
+
 //    public static ArrayList<InstaPhoto> parseInstaPhotos(Context context, String result) {
 //
 //        ArrayList<InstaPhoto> allInstaPhotos = new ArrayList<InstaPhoto>();
 //
-//        try {
+//        try {public static void parseTimes (String ) {
+//    }
 //            JSONObject jsonObj = new JSONObject(result);
 //
 //            JSONArray images = jsonObj.getJSONArray("data");

@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.joggingtrackerapp.ui.MainActivityForManagers;
+import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -27,20 +27,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
 import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
- * Created by ibrahimradwan on 9/2/15.
+ * Created by ibrahimradwan on 9/3/15.
  */
-public class CheckLogin extends AsyncTask<String, Void, String> {
+public class ReadTimes extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
-    private String emailStr;
 
-    public CheckLogin (Context context) {
+    public ReadTimes (Context context) {
         this.context = context;
     }
 
@@ -60,22 +60,20 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground (String... params) {
         if (!Checks.isNetworkAvailable(context)) return null;
-        emailStr = params[0];
-        String passStr = params[1];
         try {
             URL url = new URL(API_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
-//             Set Cookie
-//            if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
-//                conn.setRequestProperty("Cookie", Session.getsCookie(context));
-//            }
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_SESSION_ID) + ":" + MyPreferences.getString(context, Constants.PREF_API_KEY));
+//          Set Cookie
+            if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
+                conn.setRequestProperty("Cookie", Session.getsCookie(context));
+            }
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "login")
-                    .appendQueryParameter("email", emailStr)
-                    .appendQueryParameter("pass", passStr);
+                    .appendQueryParameter("task", "getTimes");
 
             String query = builder.build().getEncodedQuery();
 
@@ -88,12 +86,6 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
             os.close();
 
             conn.connect();
-
-            String cookie = conn.getHeaderField("set-cookie");
-            //Get Cookie from connection
-            if (cookie != null && cookie.length() > 0) {
-                Session.setsCookie(context, cookie);
-            }
 
             InputStream in = conn.getInputStream();
 
@@ -121,25 +113,9 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
             Log.d(TAG_DEBUG, result);
-            String[] loginData = Parse.parseLoginData(result);
-            if (loginData[0].equals("200")) {
-                if (loginData[1].equals("Login Succeeded")) {
-                    if (!loginData[2].trim().equals("") && loginData[2] != null) {
-                        Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show();
-                        MyPreferences.add(context, Constants.PREF_EMAIL, emailStr, "string");
-                        MyPreferences.add(context, Constants.PREF_SESSION_ID, loginData[2], "string");
-                        MyPreferences.add(context, Constants.PREF_LEVEL, loginData[3], "string");
-                        MyPreferences.add(context, Constants.PREF_API_KEY, loginData[4], "string");
-
-                        Utils.moveAfterLoginOrSignup(context, (loginData[3].equals("2")) ? MainActivityForUsers.class : MainActivityForManagers.class, true);
-
-                    }
-                } else {
-                    if (loginData[1] != null)
-                        Toast.makeText(context, loginData[1], Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(context, "Please Check Your Email/Password Again", Toast.LENGTH_SHORT).show();
+            ArrayList<Time> allTimes = Parse.parseTimes(context, result);
+            if (context instanceof MainActivityForUsers) {
+                ((MainActivityForUsers) context).fillTimesListView(allTimes);
             }
         }
 
