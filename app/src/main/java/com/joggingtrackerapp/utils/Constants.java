@@ -13,8 +13,9 @@ public class Constants {
 
     /* Preferences Keys*/
     public static final String PREF_EMAIL = "user_email";
-    public static final String PREF_SESSION_ID = "user_session_id";
     public static final String PREF_LEVEL = "user_level";
+    public static final String PREF_SESSION_ID = "user_session_id";
+    public static final String PREF_API_KEY = "user_api_key";
     public static final String PREF_COOKIE = "cookie";
 
 

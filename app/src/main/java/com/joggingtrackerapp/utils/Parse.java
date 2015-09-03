@@ -12,20 +12,6 @@ import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 public class Parse {
 
     public static String[] parseSignupData (String result) {
-        String[] loginData = new String[3];
-        try {
-            JSONObject jsonObj = new JSONObject(result);
-
-            loginData[0] = jsonObj.getString("status");
-            loginData[1] = jsonObj.getString("status_message");
-            loginData[2] = jsonObj.getJSONObject("data").getString("session_id");
-
-        } catch (JSONException e) {
-            Log.e(TAG_ERROR, "Error: " + e.getMessage());
-        }
-        return loginData;
-    }
-    public static String[] parseLoginData (String result) {
         String[] loginData = new String[4];
         try {
             JSONObject jsonObj = new JSONObject(result);
@@ -33,7 +19,23 @@ public class Parse {
             loginData[0] = jsonObj.getString("status");
             loginData[1] = jsonObj.getString("status_message");
             loginData[2] = jsonObj.getJSONObject("data").getString("session_id");
+            loginData[3] = jsonObj.getJSONObject("data").getString("api_key");
+
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return loginData;
+    }
+    public static String[] parseLoginData (String result) {
+        String[] loginData = new String[5];
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+
+            loginData[0] = jsonObj.getString("status");
+            loginData[1] = jsonObj.getString("status_message");
+            loginData[2] = jsonObj.getJSONObject("data").getString("session_id");
             loginData[3] = jsonObj.getJSONObject("data").getString("level");
+            loginData[4] = jsonObj.getJSONObject("data").getString("api_key");
 
         } catch (JSONException e) {
             Log.e(TAG_ERROR, "Error: " + e.getMessage());
