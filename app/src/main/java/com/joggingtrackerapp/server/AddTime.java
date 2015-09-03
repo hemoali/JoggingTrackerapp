@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -28,19 +29,19 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
+import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
- * Created by ibrahimradwan on 9/3/15.
+ * Created by ibrahimradwan on 9/2/15.
  */
-public class DeleteTime extends AsyncTask<String, Void, String> {
+public class AddTime extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
-    private int position;
+    private String dateStr, timeStr, distanceStr;
 
-    public DeleteTime (Context context, int position) {
+    public AddTime (Context context) {
         this.context = context;
-        this.position = position;
     }
 
     @Override
@@ -53,12 +54,14 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
         pd.show();
 
         InternetConnectionsTimeout.startStopWatch(this, 10000, context);
-
     }
 
     @Override
     protected String doInBackground (String... params) {
         if (!Checks.isNetworkAvailable(context)) return null;
+        dateStr = params[0];
+        timeStr = params[1];
+        distanceStr = params[2];
         try {
             URL url = new URL(API_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -66,14 +69,16 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Connection", "keep-alive");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_SESSION_ID) + ":" + MyPreferences.getString(context, Constants.PREF_API_KEY));
-//          Set Cookie
+
             if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
                 conn.setRequestProperty("Cookie", Session.getsCookie(context));
             }
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "delete_time")
-                    .appendQueryParameter("time_id", params[0]);
+                    .appendQueryParameter("task", "add_time")
+                    .appendQueryParameter("date", dateStr)
+                    .appendQueryParameter("time", timeStr)
+                    .appendQueryParameter("distance", distanceStr);
 
             String query = builder.build().getEncodedQuery();
 
@@ -103,27 +108,36 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
         return null;
     }
 
-
     @Override
     protected void onPostExecute (String result) {
         InternetConnectionsTimeout.stopStopWatch();
         pd.dismiss();
-
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
-            String[] deleteData = Parse.parseDeleteTimeData(result);
-            if (deleteData[0].trim().equals("200")) {
-                Toast.makeText(context, "Record Deleted Successfully", Toast.LENGTH_SHORT).show();
+            Log.d(TAG_DEBUG, result);
+            String[] addData = Parse.parseAddTimeData(result);
+            if (addData[0].trim().equals("200")) {
+                Toast.makeText(context, "Record Added Successfully", Toast.LENGTH_SHORT).show();
+
+                Time t = new Time();
+                t.setDate(dateStr);
+                t.setTime(timeStr);
+                t.setDistance(distanceStr);
+                t.setUser_id(addData[2]);
+                t.setId(addData[3]);
+
                 if (context instanceof MainActivityForUsers) {
 
-                    ((MainActivityForUsers) context).removeRecordFromLV(position);
+                    ((MainActivityForUsers) context).addRecordToLV(t);
+                    ((MainActivityForUsers) context).dismissAddTimeDialog();
                 }
+
+
             } else {
-                Toast.makeText(context, deleteData[1], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, addData[1], Toast.LENGTH_SHORT).show();
             }
         }
-
         super.onPostExecute(result);
     }
 

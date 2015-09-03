@@ -40,7 +40,6 @@ public class Utils {
         return new int[]{width, height};
     }
     public static String formattedDate (Context context, String date) {
-
         int Month = Integer.parseInt(date.substring(5, 7));
 
         String month = "";
