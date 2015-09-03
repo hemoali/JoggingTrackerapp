@@ -11,6 +11,7 @@ import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
+import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
 import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
 import com.joggingtrackerapp.utils.Session;
@@ -51,6 +52,9 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         pd.setMessage("Please Wait...");
         pd.setCancelable(false);
         pd.show();
+
+        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+
     }
 
     @Override
@@ -110,6 +114,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
+        InternetConnectionsTimeout.stopStopWatch();
         pd.dismiss();
 
         if (result == null || result.trim().length() <= 0) {
@@ -142,5 +147,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
     }
 
-
+    public void stop () {
+        onPostExecute(null);
+    }
 }

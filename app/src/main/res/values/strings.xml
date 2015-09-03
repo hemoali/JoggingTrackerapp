@@ -6,6 +6,7 @@
     <string name="pass">********</string>
     <string name="login">Login</string>
     <string name="signup">Signup</string>
+    <string name="menu_add_item">Add</string>
 
     <string-array name="levels_array">
         <item>Admin</item>
