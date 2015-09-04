@@ -40,12 +40,18 @@ import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 public class EditUser extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
-    private String emailStr, passStr, userIDStr, position;
+    private String emailStr, passStr, userIDStr, position, levelStr = "";
     private AlertDialog editUserDialog;
 
     public EditUser (Context context, AlertDialog editUserDialog) {
         this.context = context;
         this.editUserDialog = editUserDialog;
+    }
+
+    public EditUser (Context context, AlertDialog editUserDialog, String levelStr) {
+        this.context = context;
+        this.editUserDialog = editUserDialog;
+        this.levelStr = levelStr;
     }
 
     @Override
@@ -83,7 +89,8 @@ public class EditUser extends AsyncTask<String, Void, String> {
                     .appendQueryParameter("task", "edit_user")
                     .appendQueryParameter("user_id", userIDStr)
                     .appendQueryParameter("email", emailStr)
-                    .appendQueryParameter("pass", passStr);
+                    .appendQueryParameter("pass", passStr)
+                    .appendQueryParameter("level", levelStr);
 
             String query = builder.build().getEncodedQuery();
 
@@ -128,6 +135,7 @@ public class EditUser extends AsyncTask<String, Void, String> {
                 User u = new User();
                 u.setEmail(emailStr);
                 u.setId(userIDStr);
+                u.setLevel(levelStr);
 
                 if (context instanceof MainActivityForManagers) {
                     UsersFragment.editRecordInLV(u, position);

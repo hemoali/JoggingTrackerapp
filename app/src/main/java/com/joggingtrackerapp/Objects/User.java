@@ -6,8 +6,16 @@ import java.io.Serializable;
  * Created by ibrahimradwan on 9/4/15.
  */
 public class User implements Serializable {
-    String id, email, pass = "";
+    String id, email, pass = "", level;
     boolean optionsVisible = false;
+
+    public String getLevel () {
+        return level;
+    }
+
+    public void setLevel (String level) {
+        this.level = level;
+    }
 
     public boolean isOptionsVisible () {
         return optionsVisible;

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
@@ -71,6 +72,9 @@ public class TimesFragment extends Fragment {
         if (!filterEnabled)
             TimesFragment.allTimes = allTimes;
 
+        if (allTimes.size() == 0){
+            Toast.makeText(activity, "No Jogging Times Recorded Yet",Toast.LENGTH_SHORT).show();
+        }
         adapter = new TimesAdapter(activity, allTimes);
         listview_times.setAdapter(adapter);
     }

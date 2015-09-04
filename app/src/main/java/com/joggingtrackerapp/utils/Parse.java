@@ -176,6 +176,8 @@ public class Parse {
                     JSONObject userJson = timesJson.getJSONObject(i);
                     user.setId(userJson.getString("id"));
                     user.setEmail(userJson.getString("email"));
+                    user.setLevel(userJson.getString("level"));
+
                     users.add(user);
                 }
             } else {

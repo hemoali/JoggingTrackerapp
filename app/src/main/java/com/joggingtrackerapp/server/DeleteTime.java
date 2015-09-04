@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.MainActivityForUsers_AdminsView;
 import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -122,6 +123,8 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
                     ((MainActivityForUsers) context).removeRecordFromLV(position);
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.removeRecordFromLV(position);
+                } else if (context instanceof MainActivityForUsers_AdminsView) {
+                    ((MainActivityForUsers_AdminsView) context).removeRecordFromLV(position);
                 }
             } else {
                 Toast.makeText(context, deleteData[1], Toast.LENGTH_SHORT).show();

@@ -148,4 +148,7 @@ public class Utils {
 
     }
 
+    public static int checkLevel (Context context) {
+        return Integer.parseInt(MyPreferences.getString(context, Constants.PREF_LEVEL));
+    }
 }

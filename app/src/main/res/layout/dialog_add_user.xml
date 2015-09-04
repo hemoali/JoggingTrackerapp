@@ -18,12 +18,12 @@
             android:id="@+id/keep_empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
             android:text="** Leave password fields empty to keep the old password"
             android:textColor="#B00000"
-            android:gravity="left"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/email"
@@ -79,6 +79,16 @@
             android:singleLine="true"
             android:textColor="#45484d"
             android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/levels_array_limited"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"

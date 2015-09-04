@@ -78,10 +78,14 @@ public class ReadUsers extends AsyncTask<String, Void, String> {
             if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
                 conn.setRequestProperty("Cookie", Session.getsCookie(context));
             }
-
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "getUsers");
-
+            Uri.Builder builder;
+            if (Utils.checkLevel(context) == 0) {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "getUsers_ForAdmins");
+            } else {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "getUsers");
+            }
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = conn.getOutputStream();
@@ -120,7 +124,7 @@ public class ReadUsers extends AsyncTask<String, Void, String> {
             Log.d(TAG_DEBUG, result);
             ArrayList<User> allUsers = Parse.parseUsers(context, result);
             if (context instanceof MainActivityForManagers) {
-               usersFragment.fillUsersListView(allUsers, false);
+                usersFragment.fillUsersListView(allUsers, false);
             }
         }
 

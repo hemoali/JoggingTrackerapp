@@ -72,6 +72,9 @@ public class MainActivityForUsers extends AppCompatActivity {
         if (!filterEnabled)
             MainActivityForUsers.allTimes = allTimes;
 
+        if (allTimes.size() == 0){
+            Toast.makeText(activity, "No Jogging Times Recorded Yet",Toast.LENGTH_SHORT).show();
+        }
         adapter = new TimesAdapter(activity, allTimes);
         listview_times.setAdapter(adapter);
     }

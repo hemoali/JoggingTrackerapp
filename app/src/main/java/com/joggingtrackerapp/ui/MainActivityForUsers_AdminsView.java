@@ -3,8 +3,6 @@ package com.joggingtrackerapp.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,67 +12,84 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
-import com.joggingtrackerapp.adapters.SamplePagerAdapter;
+import com.joggingtrackerapp.adapters.TimesAdapter;
 import com.joggingtrackerapp.server.AddTime;
-import com.joggingtrackerapp.server.AddUser;
-import com.joggingtrackerapp.utils.Checks;
-import com.joggingtrackerapp.utils.SlidingTabLayout;
+import com.joggingtrackerapp.server.ReadTimes;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * Created by ibrahimradwan on 9/3/15.
  */
-public class MainActivityForManagers extends AppCompatActivity {
-    private ViewPager viewPager;
-    private SamplePagerAdapter samplePagerAdapter;
-    private Activity activity;
-    private static AlertDialog addTimeDialog, filterTimesDialog, addUserDialog;
+public class MainActivityForUsers_AdminsView extends AppCompatActivity {
+    private static ListView listview_times;
+    private static TimesAdapter adapter;
+    private static Activity activity;
+    private static ArrayList<Time> allTimes;
+    private static AlertDialog addTimeDialog, filterTimesDialog;
+    private static String userID;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         activity = this;
+        setContentView(R.layout.activity_main_for_users);
 
-        setContentView(R.layout.activity_main_for_managers);
+        listview_times = (ListView) findViewById(R.id.listview_times);
 
-        List<Fragment> fragments = getFragments();
-        samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), fragments);
+        userID = getIntent().getStringExtra("userID");
 
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(samplePagerAdapter);
+        new ReadTimes(MainActivityForUsers_AdminsView.this, userID).execute();
 
 
-        SlidingTabLayout sliding_tabs = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        sliding_tabs.setDistributeEvenly(true);
-        sliding_tabs.setViewPager(viewPager);
     }
 
+    public static void removeRecordFromLV (int position) {
+        allTimes.remove(position);
+        adapter.notifyDataSetChanged();
+    }
 
-    private List<Fragment> getFragments () {
+    public static void addRecordToLV (Time time) {
+        allTimes.add(0, time);
+        adapter.notifyDataSetChanged();
+    }
 
-        List<Fragment> fList = new ArrayList<>();
+    public void editRecordInLV (Time t, String positionStr) {
+        int position = Integer.parseInt(positionStr);
+        Time oldTime = allTimes.get(position);
+        oldTime.setDate(t.getDate());
+        oldTime.setTime(t.getTime());
+        oldTime.setDistance(t.getDistance());
+        allTimes.set(position, oldTime);
+        adapter.notifyDataSetChanged();
 
-        fList.add(new TimesFragment());
-        fList.add(new UsersFragment());
+    }
 
-        return fList;
+    public static void fillTimesListView (ArrayList<Time> allTimes, boolean filterEnabled) {
+        if (!filterEnabled)
+            MainActivityForUsers_AdminsView.allTimes = allTimes;
 
+        if (allTimes.size() == 0) {
+            Toast.makeText(activity, "No Jogging Times Recorded Yet", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter = new TimesAdapter(activity, allTimes);
+            listview_times.setAdapter(adapter);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_times_users, menu);
+        menuInflater.inflate(R.menu.menu_times, menu);
         return true;
     }
 
@@ -82,7 +97,10 @@ public class MainActivityForManagers extends AppCompatActivity {
     public boolean onOptionsItemSelected (MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu_add_time:
+            case android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.menu_add:
                 View view = getLayoutInflater().inflate(R.layout.dialog_add_time, null);
 
                 AlertDialog.Builder addTimeDialogBuilder = new AlertDialog.Builder(this);
@@ -107,7 +125,7 @@ public class MainActivityForManagers extends AppCompatActivity {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
                         } else {
-                            new AddTime(activity).execute(dateStr, timeStr, distanceStr);
+                            new AddTime(activity, userID).execute(dateStr, timeStr, distanceStr);
                         }
                     }
                 });
@@ -162,13 +180,13 @@ public class MainActivityForManagers extends AppCompatActivity {
                             Toast.makeText(activity, "'From' Date Must Be Before 'To' Date", Toast.LENGTH_SHORT).show();
                         } else {
                             ArrayList<Time> filteredItems = new ArrayList<Time>();
-                            for (Time t : TimesFragment.getAllTimes()) {
+                            for (Time t : allTimes) {
                                 String date = t.getDate();
                                 if (date.compareTo(fromDateStr) >= 0 && date.compareTo(toDateStr) <= 0) {
                                     filteredItems.add(t);
                                 }
                             }
-                            TimesFragment.fillTimesListView(filteredItems, true);
+                            fillTimesListView(filteredItems, true);
                             filterTimesDialog.dismiss();
                         }
                     }
@@ -182,54 +200,11 @@ public class MainActivityForManagers extends AppCompatActivity {
                 resetFilter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick (View v) {
-                        TimesFragment.fillTimesListView(TimesFragment.getAllTimes(), false);
+                        fillTimesListView(allTimes, false);
                         filterTimesDialog.dismiss();
                     }
                 });
                 filterTimesDialog = filterTimesDialogBuilder.show();
-                return true;
-            case R.id.menu_add_user:
-                View addUserView = getLayoutInflater().inflate(R.layout.dialog_add_user, null);
-
-                AlertDialog.Builder addUserDialogBuilder = new AlertDialog.Builder(this);
-                addUserDialogBuilder.setView(addUserView);
-                addUserDialogBuilder.setCancelable(true);
-
-                // Listeners
-                Button addUser = (Button) addUserView.findViewById(R.id.addUser);
-                Button addUserCancel = (Button) addUserView.findViewById(R.id.cancel);
-                final EditText emailET = (EditText) addUserView.findViewById(R.id.email);
-                final EditText passET = (EditText) addUserView.findViewById(R.id.pass);
-                final EditText pass2ET = (EditText) addUserView.findViewById(R.id.pass2);
-
-                addUser.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick (View v) {
-                        String emailStr = emailET.getText().toString().trim();
-                        String passStr = passET.getText().toString().trim();
-                        String pass2Str = pass2ET.getText().toString().trim();
-                        if (emailStr.length() <= 0 || passStr.length() <= 0 || pass2ET.length() <= 0) {
-                            Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (!Checks.isEmailValid(emailStr)) {
-                            Toast.makeText(activity, "Invalid Email", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (!pass2Str.equals(passStr)) {
-                            Toast.makeText(activity, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        new AddUser(activity).execute(emailStr, passStr);
-                    }
-                });
-                addUserCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick (View v) {
-                        addUserDialog.dismiss();
-                    }
-                });
-                addUserDialog = addUserDialogBuilder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -240,8 +215,5 @@ public class MainActivityForManagers extends AppCompatActivity {
         addTimeDialog.dismiss();
     }
 
-    public static void dismissAddUserDialog () {
-        addUserDialog.dismiss();
-    }
 
 }

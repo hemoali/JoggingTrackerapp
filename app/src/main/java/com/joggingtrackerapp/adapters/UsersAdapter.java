@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import com.joggingtrackerapp.Objects.User;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.server.DeleteUser;
 import com.joggingtrackerapp.server.EditUser;
+import com.joggingtrackerapp.ui.MainActivityForUsers_AdminsView;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Utils;
 
@@ -36,6 +40,7 @@ public class UsersAdapter extends BaseAdapter {
     private static ArrayList<User> allUsers;
     private boolean stopAnimation = false;
     private AlertDialog editUserDialog;
+    private int translationXDP = 90;
 
     public UsersAdapter (Context c, ArrayList<User> allUsers) {
         context = c;
@@ -80,11 +85,19 @@ public class UsersAdapter extends BaseAdapter {
         final ImageView edit = (ImageView) holder.findViewById(R.id.edit);
 
         final ImageView delete = (ImageView) holder.findViewById(R.id.delete);
+
+        final ImageView user_times = (ImageView) holder.findViewById(R.id.user_tmies);
         // Fill Fields
 
         id.setText(currentUser.getId());
         email.setText(currentUser.getEmail());
 
+        if (currentUser.getLevel().equals("1"))
+            id.setTextColor(Color.RED);
+
+        if (Utils.checkLevel(context) == 0) {
+            translationXDP = 135;
+        }
         // Listeners
         holder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +106,7 @@ public class UsersAdapter extends BaseAdapter {
                 ObjectAnimator moveHolderAnimationX;
                 if (!currentUser.isOptionsVisible()) {
                     moveHolderAnimationX = ObjectAnimator.ofFloat(
-                            mainLayout, "translationX", 0, Utils.dpToPx(context, 90));
+                            mainLayout, "translationX", 0, Utils.dpToPx(context, translationXDP));
                     moveHolderAnimationX.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart (Animator animation) {
@@ -101,12 +114,19 @@ public class UsersAdapter extends BaseAdapter {
                                     .setDuration(200).start();
                             ObjectAnimator.ofFloat(delete, "alpha", 1f)
                                     .setDuration(200).start();
+                            if (Utils.checkLevel(context) == 0) {
+                                ObjectAnimator.ofFloat(user_times, "alpha", 1f)
+                                        .setDuration(200).start();
+                            }
                         }
 
                         @Override
                         public void onAnimationEnd (Animator animation) {
                             edit.setVisibility(View.VISIBLE);
                             delete.setVisibility(View.VISIBLE);
+                            if (Utils.checkLevel(context) == 0) {
+                                user_times.setVisibility(View.VISIBLE);
+                            }
                         }
 
                         @Override
@@ -122,7 +142,7 @@ public class UsersAdapter extends BaseAdapter {
 
                 } else {
                     moveHolderAnimationX = ObjectAnimator.ofFloat(
-                            mainLayout, "translationX", Utils.dpToPx(context, 90), 0);
+                            mainLayout, "translationX", Utils.dpToPx(context, translationXDP), 0);
                     moveHolderAnimationX.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart (Animator animation) {
@@ -130,12 +150,19 @@ public class UsersAdapter extends BaseAdapter {
                                     .setDuration(300).start();
                             ObjectAnimator.ofFloat(delete, "alpha", 0f)
                                     .setDuration(300).start();
+                            if (Utils.checkLevel(context) == 0) {
+                                ObjectAnimator.ofFloat(user_times, "alpha", 0f)
+                                        .setDuration(300).start();
+                            }
                         }
 
                         @Override
                         public void onAnimationEnd (Animator animation) {
                             edit.setVisibility(View.GONE);
                             delete.setVisibility(View.GONE);
+                            if (Utils.checkLevel(context) == 0) {
+                                user_times.setVisibility(View.GONE);
+                            }
                         }
 
                         @Override
@@ -194,7 +221,10 @@ public class UsersAdapter extends BaseAdapter {
                 final EditText passET = (EditText) view.findViewById(R.id.pass);
                 final EditText pass2ET = (EditText) view.findViewById(R.id.pass2);
                 TextView keep_empty = (TextView) view.findViewById(R.id.keep_empty);
+                final Spinner levelSP = (Spinner) view.findViewById(R.id.level);
                 keep_empty.setVisibility(View.VISIBLE);
+                levelSP.setVisibility((Utils.checkLevel(context) == 0) ? View.VISIBLE : View.GONE);
+                levelSP.setSelection(Integer.parseInt(currentUser.getLevel()) - 1);
                 emailET.setText(currentUser.getEmail());
 
                 editItem.setOnClickListener(new View.OnClickListener() {
@@ -203,9 +233,9 @@ public class UsersAdapter extends BaseAdapter {
                         String emailStr = emailET.getText().toString().trim();
                         String passStr = passET.getText().toString().trim();
                         String pass2Str = pass2ET.getText().toString().trim();
+                        String levelStr = String.valueOf(levelSP.getSelectedItemPosition());
                         if (emailStr.equals("") || emailStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
-
                         } else {
                             if (!Checks.isEmailValid(emailStr)) {
                                 Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
@@ -213,7 +243,11 @@ public class UsersAdapter extends BaseAdapter {
                                 if (!pass2Str.trim().equals(passStr.trim())) {
                                     Toast.makeText(context, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    new EditUser(context, editUserDialog).execute(emailStr, passStr, currentUser.getId(), String.valueOf(position));
+                                    if (!levelStr.equals("0") && !levelStr.equals("1") && !levelStr.equals("2")) {
+                                        Toast.makeText(context, "Invalid Level", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        new EditUser(context, editUserDialog, levelStr).execute(emailStr, passStr, currentUser.getId(), String.valueOf(position));
+                                    }
                                 }
                             }
                         }
@@ -226,6 +260,14 @@ public class UsersAdapter extends BaseAdapter {
                     }
                 });
                 editUserDialog = editUserDialogBuilder.show();
+            }
+        });
+        user_times.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                Intent i = new Intent(context, MainActivityForUsers_AdminsView.class);
+                i.putExtra("userID", currentUser.getId());
+                context.startActivity(i);
             }
         });
         // Animation

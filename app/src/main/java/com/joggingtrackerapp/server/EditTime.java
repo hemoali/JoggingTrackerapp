@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.MainActivityForUsers_AdminsView;
 import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -137,6 +138,8 @@ public class EditTime extends AsyncTask<String, Void, String> {
                     ((MainActivityForUsers) context).editRecordInLV(t, position);
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.editRecordInLV(t, position);
+                }else if (context instanceof MainActivityForUsers_AdminsView) {
+                    ((MainActivityForUsers_AdminsView) context).editRecordInLV(t, position);
                 }
                 editTimeDialog.dismiss();
 

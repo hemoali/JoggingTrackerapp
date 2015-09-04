@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.MainActivityForUsers_AdminsView;
 import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -42,6 +43,7 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
     private TimesFragment timesFragment;
+    private String userID = "0";
 
     public ReadTimes (Context context) {
         this.context = context;
@@ -50,6 +52,11 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
     public ReadTimes (Context context, TimesFragment timesFragment) {
         this.context = context;
         this.timesFragment = timesFragment;
+    }
+
+    public ReadTimes (Context context, String userID) {
+        this.context = context;
+        this.userID = userID;
     }
 
     @Override
@@ -80,9 +87,15 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
                 conn.setRequestProperty("Cookie", Session.getsCookie(context));
             }
 
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "getTimes");
-
+            Uri.Builder builder;
+            if (userID.trim().equals("0")) {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "getTimes");
+            } else {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "getTimes_ForAdmin")
+                        .appendQueryParameter("user_id", userID);
+            }
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = conn.getOutputStream();
@@ -126,6 +139,8 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
                 ((MainActivityForUsers) context).fillTimesListView(allTimes, false);
             } else if (context instanceof MainActivityForManagers) {
                 timesFragment.fillTimesListView(allTimes, false);
+            } else if (context instanceof MainActivityForUsers_AdminsView) {
+                ((MainActivityForUsers_AdminsView) context).fillTimesListView(allTimes, false);
             }
         }
 

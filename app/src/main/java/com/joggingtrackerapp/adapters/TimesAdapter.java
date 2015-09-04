@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class TimesAdapter extends BaseAdapter {
     private Context context;
-    private static ArrayList<Time> allTimes;
+    private ArrayList<Time> allTimes;
     private boolean stopAnimation = false;
     private AlertDialog editTimeDialog;
 
@@ -46,7 +46,7 @@ public class TimesAdapter extends BaseAdapter {
             public void run () {
                 stopAnimation = true;
             }
-        }, 2000);
+        }, 1200);
     }
 
 

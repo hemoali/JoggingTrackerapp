@@ -25,6 +25,9 @@
         <activity
             android:name=".ui.MainActivityForUsers"
             android:label="@string/jogging_times" />
+        <activity
+            android:name=".ui.MainActivityForUsers_AdminsView"
+            android:label="@string/jogging_times" />
     </application>
 
 </manifest>

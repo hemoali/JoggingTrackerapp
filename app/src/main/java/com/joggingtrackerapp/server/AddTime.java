@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.MainActivityForUsers_AdminsView;
 import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
@@ -40,10 +41,15 @@ import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 public class AddTime extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
-    private String dateStr, timeStr, distanceStr;
+    private String dateStr, timeStr, distanceStr, userID = "0";
 
     public AddTime (Context context) {
         this.context = context;
+    }
+
+    public AddTime (Context context, String userID) {
+        this.context = context;
+        this.userID = userID;
     }
 
     @Override
@@ -75,13 +81,21 @@ public class AddTime extends AsyncTask<String, Void, String> {
             if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
                 conn.setRequestProperty("Cookie", Session.getsCookie(context));
             }
-
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "add_time")
-                    .appendQueryParameter("date", dateStr)
-                    .appendQueryParameter("time", timeStr)
-                    .appendQueryParameter("distance", distanceStr);
-
+            Uri.Builder builder;
+            if (userID.trim().equals("0")) {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "add_time")
+                        .appendQueryParameter("date", dateStr)
+                        .appendQueryParameter("time", timeStr)
+                        .appendQueryParameter("distance", distanceStr);
+            } else {
+                builder = new Uri.Builder()
+                        .appendQueryParameter("task", "add_time_admin")
+                        .appendQueryParameter("user_id", userID)
+                        .appendQueryParameter("date", dateStr)
+                        .appendQueryParameter("time", timeStr)
+                        .appendQueryParameter("distance", distanceStr);
+            }
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = conn.getOutputStream();
@@ -136,6 +150,9 @@ public class AddTime extends AsyncTask<String, Void, String> {
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.addRecordToLV(t);
                     ((MainActivityForManagers) context).dismissAddTimeDialog();
+                } else if (context instanceof MainActivityForUsers_AdminsView) {
+                    ((MainActivityForUsers_AdminsView) context).addRecordToLV(t);
+                    ((MainActivityForUsers_AdminsView) context).dismissAddTimeDialog();
                 }
 
 
