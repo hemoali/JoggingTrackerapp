@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.joggingtrackerapp.Objects.User;
 import com.joggingtrackerapp.R;
+import com.joggingtrackerapp.server.DeleteUser;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -148,15 +150,15 @@ public class UsersAdapter extends BaseAdapter {
             }
         });
 
-        /*delete.setOnClickListener(new View.OnClickListener() {
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context).setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle("Are you sure?")
-                        .setMessage("This record will be deleted.").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setMessage("This user will be deleted.").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick (DialogInterface dialog, int which) {
-                                new DeleteTime(context, position).execute(currentTime.getId());
+                                new DeleteUser(context, position).execute(currentUser.getId());
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
@@ -170,7 +172,7 @@ public class UsersAdapter extends BaseAdapter {
             }
         });
 
-        edit.setOnClickListener(new View.OnClickListener() {
+        /*edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_time, null);

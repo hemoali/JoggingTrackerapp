@@ -7,6 +7,7 @@ import android.os.Handler;
 import com.joggingtrackerapp.server.AddTime;
 import com.joggingtrackerapp.server.CheckLogin;
 import com.joggingtrackerapp.server.DeleteTime;
+import com.joggingtrackerapp.server.DeleteUser;
 import com.joggingtrackerapp.server.ReadTimes;
 import com.joggingtrackerapp.server.ReadUsers;
 import com.joggingtrackerapp.server.SignUp;
@@ -52,6 +53,8 @@ public class InternetConnectionsTimeout {
             public void run () {
                 if (asyncTask instanceof ReadUsers) {
                     ((ReadUsers) asyncTask).stop();
+                } else if(asyncTask instanceof DeleteUser){
+                    ((DeleteUser) asyncTask).stop();
                 }
             }
         };

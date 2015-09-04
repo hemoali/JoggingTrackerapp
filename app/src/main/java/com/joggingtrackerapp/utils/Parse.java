@@ -66,6 +66,19 @@ public class Parse {
         }
         return deleteData;
     }
+    public static String[] parseDeleteUserData (String result) {
+        String[] deleteData = new String[2];
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+
+            deleteData[0] = jsonObj.getString("status");
+            deleteData[1] = jsonObj.getString("status_message");
+
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return deleteData;
+    }
 
     public static String[] parseAddTimeData (String result) {
         String[] AddData = new String[4];
