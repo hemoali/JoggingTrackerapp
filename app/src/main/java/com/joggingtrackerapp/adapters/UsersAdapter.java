@@ -3,27 +3,19 @@ package com.joggingtrackerapp.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.joggingtrackerapp.Objects.Time;
+import com.joggingtrackerapp.Objects.User;
 import com.joggingtrackerapp.R;
-import com.joggingtrackerapp.server.DeleteTime;
-import com.joggingtrackerapp.server.EditTime;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -31,15 +23,15 @@ import java.util.ArrayList;
 /**
  * Created by ibrahimradwan on 9/3/15.
  */
-public class TimesAdapter extends BaseAdapter {
+public class UsersAdapter extends BaseAdapter {
     private Context context;
-    private static ArrayList<Time> allTimes;
+    private static ArrayList<User> allUsers;
     private boolean stopAnimation = false;
-    private AlertDialog editTimeDialog;
+    private AlertDialog editUserDialog;
 
-    public TimesAdapter (Context c, ArrayList<Time> allTimes) {
+    public UsersAdapter (Context c, ArrayList<User> allUsers) {
         context = c;
-        this.allTimes = allTimes;
+        this.allUsers = allUsers;
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -52,12 +44,12 @@ public class TimesAdapter extends BaseAdapter {
 
     @Override
     public int getCount () {
-        return allTimes.size();
+        return allUsers.size();
     }
 
     @Override
     public Object getItem (int position) {
-        return allTimes.get(position);
+        return allUsers.get(position);
     }
 
     @Override
@@ -69,11 +61,11 @@ public class TimesAdapter extends BaseAdapter {
     public View getView (final int position, View convertView, ViewGroup parent) {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View holder = mInflater.inflate(R.layout.listview_time, null);
+        final View holder = mInflater.inflate(R.layout.listview_user, null);
 
-        final TextView time = (TextView) holder.findViewById(R.id.time), date = (TextView) holder.findViewById(R.id.date), distance = (TextView) holder.findViewById(R.id.distance), speed = (TextView) holder.findViewById(R.id.speed);
+        final TextView id = (TextView) holder.findViewById(R.id.id), email = (TextView) holder.findViewById(R.id.email);
 
-        final Time currentTime = allTimes.get(position);
+        final User currentUser = allUsers.get(position);
 
         final LinearLayout mainLayout = (LinearLayout) holder.findViewById(R.id.mainLayout);
 
@@ -82,10 +74,8 @@ public class TimesAdapter extends BaseAdapter {
         final ImageView delete = (ImageView) holder.findViewById(R.id.delete);
         // Fill Fields
 
-        time.setText(currentTime.getTime());
-        date.setText(Utils.formattedDate(context, currentTime.getDate()));
-        distance.setText(currentTime.getDistance());
-        speed.setText(currentTime.getSpeed());
+        id.setText(currentUser.getId());
+        email.setText(currentUser.getEmail());
 
         // Listeners
         holder.setOnClickListener(new View.OnClickListener() {
@@ -93,9 +83,9 @@ public class TimesAdapter extends BaseAdapter {
             public void onClick (View v) {
 
                 ObjectAnimator moveHolderAnimationX;
-                if (!currentTime.isOptionsVisible()) {
+                if (!currentUser.isOptionsVisible()) {
                     moveHolderAnimationX = ObjectAnimator.ofFloat(
-                            mainLayout, "translationX", 0, Utils.dpToPx(context, 45));
+                            mainLayout, "translationX", 0, Utils.dpToPx(context, 90));
                     moveHolderAnimationX.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart (Animator animation) {
@@ -124,7 +114,7 @@ public class TimesAdapter extends BaseAdapter {
 
                 } else {
                     moveHolderAnimationX = ObjectAnimator.ofFloat(
-                            mainLayout, "translationX", Utils.dpToPx(context, 45), 0);
+                            mainLayout, "translationX", Utils.dpToPx(context, 90), 0);
                     moveHolderAnimationX.addListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart (Animator animation) {
@@ -154,11 +144,11 @@ public class TimesAdapter extends BaseAdapter {
                 }
                 moveHolderAnimationX.setDuration(300);
                 moveHolderAnimationX.start();
-                currentTime.setOptionsVisible(!currentTime.isOptionsVisible());
+                currentUser.setOptionsVisible(!currentUser.isOptionsVisible());
             }
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
+        /*delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context).setIconAttribute(android.R.attr.alertDialogIcon)
@@ -225,7 +215,7 @@ public class TimesAdapter extends BaseAdapter {
                 });
                 editTimeDialog = addTimeDialogBuilder.show();
             }
-        });
+        });*/
         // Animation
         if (!stopAnimation) {
             ObjectAnimator addHolderAnimationY = ObjectAnimator.ofFloat(

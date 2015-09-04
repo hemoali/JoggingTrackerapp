@@ -8,7 +8,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
+import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
 import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
@@ -53,7 +55,7 @@ public class AddTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
     }
 
     @Override
@@ -110,7 +112,7 @@ public class AddTime extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
-        InternetConnectionsTimeout.stopStopWatch();
+        InternetConnectionsTimeout.stopTimesStopWatch();
         pd.dismiss();
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
@@ -131,6 +133,9 @@ public class AddTime extends AsyncTask<String, Void, String> {
 
                     ((MainActivityForUsers) context).addRecordToLV(t);
                     ((MainActivityForUsers) context).dismissAddTimeDialog();
+                } else if (context instanceof MainActivityForManagers) {
+                    TimesFragment.addRecordToLV(t);
+                    ((MainActivityForManagers) context).dismissAddTimeDialog();
                 }
 
 

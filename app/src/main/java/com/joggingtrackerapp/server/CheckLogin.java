@@ -53,7 +53,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
 
     }
 
@@ -114,7 +114,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
-        InternetConnectionsTimeout.stopStopWatch();
+        InternetConnectionsTimeout.stopTimesStopWatch();
         pd.dismiss();
 
         if (result == null || result.trim().length() <= 0) {

@@ -1,7 +1,6 @@
 package com.joggingtrackerapp.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.ListView;
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.adapters.TimesAdapter;
+import com.joggingtrackerapp.server.ReadTimes;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,10 @@ public class TimesFragment extends Fragment {
     private static TimesAdapter adapter;
     private static Activity activity;
     private static ArrayList<Time> allTimes;
-    private static AlertDialog addTimeDialog, filterTimesDialog;
+
+    public static ArrayList<Time> getAllTimes () {
+        return allTimes;
+    }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +38,42 @@ public class TimesFragment extends Fragment {
 
     @Override
     public void onActivityCreated (Bundle savedInstanceState) {
+        activity = getActivity();
+
+        listview_times = (ListView) rootView.findViewById(R.id.listview_times);
+        new ReadTimes(activity, this).execute();
 
         super.onActivityCreated(savedInstanceState);
     }
+
+    public static void removeRecordFromLV (int position) {
+        allTimes.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    public static void addRecordToLV (Time time) {
+        allTimes.add(0, time);
+        adapter.notifyDataSetChanged();
+    }
+
+    public static void editRecordInLV (Time t, String positionStr) {
+        int position = Integer.parseInt(positionStr);
+        Time oldTime = allTimes.get(position);
+        oldTime.setDate(t.getDate());
+        oldTime.setTime(t.getTime());
+        oldTime.setDistance(t.getDistance());
+        allTimes.set(position, oldTime);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public static void fillTimesListView (ArrayList<Time> allTimes, boolean filterEnabled) {
+        if (!filterEnabled)
+            TimesFragment.allTimes = allTimes;
+
+        adapter = new TimesAdapter(activity, allTimes);
+        listview_times.setAdapter(adapter);
+    }
+
+
 }

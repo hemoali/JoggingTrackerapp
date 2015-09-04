@@ -1,5 +1,7 @@
 package com.joggingtrackerapp.ui;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -7,9 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.adapters.SamplePagerAdapter;
+import com.joggingtrackerapp.server.AddTime;
+import com.joggingtrackerapp.server.AddUser;
+import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -21,14 +33,16 @@ import java.util.List;
  */
 public class MainActivityForManagers extends AppCompatActivity {
     private ViewPager viewPager;
-    //private static SlidingTabLayout slidingTabLayout;
     private SamplePagerAdapter samplePagerAdapter;
+    private Activity activity;
+    private static AlertDialog addTimeDialog, filterTimesDialog, addUserDialog;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        activity = this;
 
         setContentView(R.layout.activity_main_for_managers);
 
@@ -50,7 +64,7 @@ public class MainActivityForManagers extends AppCompatActivity {
         List<Fragment> fList = new ArrayList<>();
 
         fList.add(new TimesFragment());
-        fList.add(new TimesFragment());
+        fList.add(new UsersFragment());
 
         return fList;
 
@@ -59,7 +73,7 @@ public class MainActivityForManagers extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_times, menu);
+        menuInflater.inflate(R.menu.menu_times_users, menu);
         return true;
     }
 
@@ -67,15 +81,166 @@ public class MainActivityForManagers extends AppCompatActivity {
     public boolean onOptionsItemSelected (MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu_add:
+            case R.id.menu_add_time:
+                View view = getLayoutInflater().inflate(R.layout.dialog_add_time, null);
 
+                AlertDialog.Builder addTimeDialogBuilder = new AlertDialog.Builder(this);
+                addTimeDialogBuilder.setView(view);
+                addTimeDialogBuilder.setCancelable(true);
+
+                // Listeners
+                Button addItem = (Button) view.findViewById(R.id.addItem);
+                Button cancel = (Button) view.findViewById(R.id.cancel);
+                final EditText time = (EditText) view.findViewById(R.id.time);
+                final EditText distance = (EditText) view.findViewById(R.id.distance);
+                final DatePicker date = (DatePicker) view.findViewById(R.id.date);
+
+                addItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        String timeStr = time.getText().toString().trim();
+                        String distanceStr = distance.getText().toString().trim();
+                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDayOfMonth());
+                        if (timeStr.equals("") || timeStr == null || distanceStr.equals("") || distanceStr == null ||
+                                dateStr.trim().equals("") || dateStr == null) {
+                            Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            new AddTime(activity).execute(dateStr, timeStr, distanceStr);
+                        }
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        addTimeDialog.dismiss();
+                    }
+                });
+                addTimeDialog = addTimeDialogBuilder.show();
                 return true;
             case R.id.menu_filter_by_date:
+                View filterView = getLayoutInflater().inflate(R.layout.dialog_filter_times, null);
 
+                AlertDialog.Builder filterTimesDialogBuilder = new AlertDialog.Builder(this);
+                filterTimesDialogBuilder.setView(filterView);
+                filterTimesDialogBuilder.setCancelable(true);
+
+                // Listeners
+                Button filterItems = (Button) filterView.findViewById(R.id.filter);
+                Button cancelFilter = (Button) filterView.findViewById(R.id.cancel);
+                Button resetFilter = (Button) filterView.findViewById(R.id.reset);
+                final ImageView switchDatePicker = (ImageView) filterView.findViewById(R.id.switchDatePicker);
+                final DatePicker fromDate = (DatePicker) filterView.findViewById(R.id.fromDate);
+                final DatePicker toDate = (DatePicker) filterView.findViewById(R.id.toDate);
+
+
+                switchDatePicker.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        if (fromDate.getVisibility() == View.VISIBLE) {
+                            switchDatePicker.setImageResource(R.drawable.to_enabled_check);
+                            fromDate.setVisibility(View.GONE);
+                            toDate.setVisibility(View.VISIBLE);
+                        } else {
+                            switchDatePicker.setImageResource(R.drawable.from_enabled_check);
+                            fromDate.setVisibility(View.VISIBLE);
+                            toDate.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                filterItems.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        String fromDateStr = fromDate.getYear() + "-" + String.format("%02d", fromDate.getMonth()) + "-" + String.format("%02d", fromDate.getDayOfMonth());
+                        String toDateStr = toDate.getYear() + "-" + String.format("%02d", toDate.getMonth()) + "-" + String.format("%02d", toDate.getDayOfMonth());
+                        if (toDateStr.equals("") || toDateStr == null ||
+                                fromDateStr.trim().equals("") || fromDateStr == null) {
+                            Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
+
+                        } else if (fromDateStr.compareTo(toDateStr) > 0) {
+                            Toast.makeText(activity, "'From' Date Must Be Before 'To' Date", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ArrayList<Time> filteredItems = new ArrayList<Time>();
+                            for (Time t : TimesFragment.getAllTimes()) {
+                                String date = t.getDate();
+                                if (date.compareTo(fromDateStr) >= 0 && date.compareTo(toDateStr) <= 0) {
+                                    filteredItems.add(t);
+                                }
+                            }
+                            TimesFragment.fillTimesListView(filteredItems, true);
+                            filterTimesDialog.dismiss();
+                        }
+                    }
+                });
+                cancelFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        filterTimesDialog.dismiss();
+                    }
+                });
+                resetFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        TimesFragment.fillTimesListView(TimesFragment.getAllTimes(), false);
+                        filterTimesDialog.dismiss();
+                    }
+                });
+                filterTimesDialog = filterTimesDialogBuilder.show();
+                return true;
+            case R.id.menu_add_user:
+                View addUserView = getLayoutInflater().inflate(R.layout.dialog_add_user, null);
+
+                AlertDialog.Builder addUserDialogBuilder = new AlertDialog.Builder(this);
+                addUserDialogBuilder.setView(addUserView);
+                addUserDialogBuilder.setCancelable(true);
+
+                // Listeners
+                Button addUser = (Button) addUserView.findViewById(R.id.addUser);
+                Button addUserCancel = (Button) addUserView.findViewById(R.id.cancel);
+                final EditText emailET = (EditText) addUserView.findViewById(R.id.email);
+                final EditText passET = (EditText) addUserView.findViewById(R.id.pass);
+                final EditText pass2ET = (EditText) addUserView.findViewById(R.id.pass2);
+
+                addUser.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        String emailStr = emailET.getText().toString().trim();
+                        String passStr = passET.getText().toString().trim();
+                        String pass2Str = pass2ET.getText().toString().trim();
+                        if (emailStr.length() <= 0 || passStr.length() <= 0 || pass2ET.length() <= 0) {
+                            Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (!Checks.isEmailValid(emailStr)) {
+                            Toast.makeText(activity, "Invalid Email", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (!pass2Str.equals(passStr)) {
+                            Toast.makeText(activity, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        new AddUser(activity).execute(emailStr, passStr);
+                    }
+                });
+                addUserCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v) {
+                        addUserDialog.dismiss();
+                    }
+                });
+                addUserDialog = addUserDialogBuilder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public static void dismissAddTimeDialog () {
+        addTimeDialog.dismiss();
+    }
+
+    public static void dismissAddUserDialog () {
+        addUserDialog.dismiss();
     }
 
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
+import com.joggingtrackerapp.Objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,6 +82,20 @@ public class Parse {
         }
         return AddData;
     }
+    public static String[] parseAddUserData (String result) {
+        String[] AddData = new String[4];
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+
+            AddData[0] = jsonObj.getString("status");
+            AddData[1] = jsonObj.getString("status_message");
+            AddData[2] = jsonObj.getJSONObject("data").getString("_id");
+
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return AddData;
+    }
 
     public static String[] parseUpdateTimeData (String result) {
         String[] AddData = new String[2];
@@ -121,6 +136,30 @@ public class Parse {
             Log.e(TAG_ERROR, "Error: " + e.getMessage());
         }
         return times;
+    }
+
+    public static ArrayList<User> parseUsers (Context context, String result) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            JSONObject jsonObj = new JSONObject(result);
+            String status = jsonObj.getString("status");
+            if (status.equals("200")) {
+                JSONArray timesJson = jsonObj.getJSONArray("data");
+                for (int i = 0; i < timesJson.length(); i++) {
+                    User user = new User();
+
+                    JSONObject userJson = timesJson.getJSONObject(i);
+                    user.setId(userJson.getString("id"));
+                    user.setEmail(userJson.getString("email"));
+                    users.add(user);
+                }
+            } else {
+                Toast.makeText(context, jsonObj.getString("status_message"), Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return users;
     }
 
 //    public static ArrayList<InstaPhoto> parseInstaPhotos(Context context, String result) {

@@ -9,7 +9,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
+import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
 import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
@@ -41,6 +43,7 @@ public class EditTime extends AsyncTask<String, Void, String> {
     private Context context;
     private String dateStr, timeStr, distanceStr, timeIDStr, position;
     private AlertDialog editTimeDialog;
+
     public EditTime (Context context, AlertDialog editTimeDialog) {
         this.context = context;
         this.editTimeDialog = editTimeDialog;
@@ -55,7 +58,7 @@ public class EditTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
     }
 
     @Override
@@ -115,7 +118,7 @@ public class EditTime extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
-        InternetConnectionsTimeout.stopStopWatch();
+        InternetConnectionsTimeout.stopTimesStopWatch();
         pd.dismiss();
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
@@ -131,10 +134,11 @@ public class EditTime extends AsyncTask<String, Void, String> {
                 t.setDistance(distanceStr);
 
                 if (context instanceof MainActivityForUsers) {
-
                     ((MainActivityForUsers) context).editRecordInLV(t, position);
-                    editTimeDialog.dismiss();
+                } else if (context instanceof MainActivityForManagers) {
+                    TimesFragment.editRecordInLV(t, position);
                 }
+                editTimeDialog.dismiss();
 
 
             } else {

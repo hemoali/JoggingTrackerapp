@@ -12,6 +12,8 @@
 
 
     <string name="menu_add_item">Add</string>
+    <string name="menu_add_time">Add Time</string>
+    <string name="menu_add_user">Add User</string>
     <string name="menu_cancel_item">Cancel</string>
     <string name="menu_filter">Filter</string>
 

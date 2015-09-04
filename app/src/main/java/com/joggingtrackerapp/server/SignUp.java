@@ -53,7 +53,7 @@ public class SignUp extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class SignUp extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
-        InternetConnectionsTimeout.stopStopWatch();
+        InternetConnectionsTimeout.stopTimesStopWatch();
         pd.dismiss();
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();

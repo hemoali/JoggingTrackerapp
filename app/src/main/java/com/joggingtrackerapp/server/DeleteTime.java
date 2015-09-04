@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.joggingtrackerapp.ui.MainActivityForManagers;
 import com.joggingtrackerapp.ui.MainActivityForUsers;
+import com.joggingtrackerapp.ui.TimesFragment;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Constants;
 import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
@@ -52,7 +54,7 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
 
     }
 
@@ -106,7 +108,7 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute (String result) {
-        InternetConnectionsTimeout.stopStopWatch();
+        InternetConnectionsTimeout.stopTimesStopWatch();
         pd.dismiss();
 
         if (result == null || result.trim().length() <= 0) {
@@ -118,6 +120,8 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
                 if (context instanceof MainActivityForUsers) {
 
                     ((MainActivityForUsers) context).removeRecordFromLV(position);
+                } else if (context instanceof MainActivityForManagers) {
+                    TimesFragment.removeRecordFromLV(position);
                 }
             } else {
                 Toast.makeText(context, deleteData[1], Toast.LENGTH_SHORT).show();

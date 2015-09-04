@@ -3,7 +3,9 @@ package com.joggingtrackerapp.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import com.joggingtrackerapp.R;
 
@@ -32,13 +34,19 @@ public class Utils {
         return bd.floatValue();
     }
 
-    public static int[] getScreenDiem(Context context){
+    public static int[] getScreenDiem (Context context) {
         DisplayMetrics displaymetrics = new DisplayMetrics();
-        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;
         int width = displaymetrics.widthPixels;
         return new int[]{width, height};
     }
+
+    public static float dpToPx (Context context, int dp) {
+        Resources r = context.getResources();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+    }
+
     public static String formattedDate (Context context, String date) {
         int Month = Integer.parseInt(date.substring(5, 7));
 
@@ -55,7 +63,7 @@ public class Utils {
         String Year = date.substring(0, 4);
 
 
-        switch (Month+1) {
+        switch (Month + 1) {
             case 1:
                 month = context.getResources().getString(R.string.jan);
                 break;
