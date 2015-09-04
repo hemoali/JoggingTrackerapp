@@ -22,10 +22,6 @@
         <item>Users Manager</item>
         <item>User</item>
     </string-array>
-    <string-array name="levels_array_limited">
-        <item>Users Manager</item>
-        <item>User</item>
-    </string-array>
     <!-- Date/Time Shortcuts -->
 
     <string name="jan">Jan</string>

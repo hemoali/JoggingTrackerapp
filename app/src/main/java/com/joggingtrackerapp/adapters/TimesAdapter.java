@@ -161,6 +161,7 @@ public class TimesAdapter extends BaseAdapter {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                holder.performClick();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context).setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle("Are you sure?")
                         .setMessage("This record will be deleted.").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -183,6 +184,7 @@ public class TimesAdapter extends BaseAdapter {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                holder.performClick();
                 View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_time, null);
                 AlertDialog.Builder addTimeDialogBuilder = new AlertDialog.Builder(context);
                 addTimeDialogBuilder.setView(view);
@@ -245,4 +247,5 @@ public class TimesAdapter extends BaseAdapter {
         }
         return holder;
     }
+
 }

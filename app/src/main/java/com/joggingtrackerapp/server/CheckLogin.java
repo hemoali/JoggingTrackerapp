@@ -67,10 +67,6 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
-//             Set Cookie
-//            if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
-//                conn.setRequestProperty("Cookie", Session.getsCookie(context));
-//            }
 
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("task", "login")
@@ -130,7 +126,6 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
                         MyPreferences.add(context, Constants.PREF_SESSION_ID, loginData[2], "string");
                         MyPreferences.add(context, Constants.PREF_LEVEL, loginData[3], "string");
                         MyPreferences.add(context, Constants.PREF_API_KEY, loginData[4], "string");
-
                         Utils.moveAfterLoginOrSignup(context, (loginData[3].equals("2")) ? MainActivityForUsers.class : MainActivityForManagers.class, true);
 
                     }

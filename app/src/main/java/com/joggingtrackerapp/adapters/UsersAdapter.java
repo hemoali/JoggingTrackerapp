@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,9 +93,11 @@ public class UsersAdapter extends BaseAdapter {
         id.setText(currentUser.getId());
         email.setText(currentUser.getEmail());
 
-        if (currentUser.getLevel().equals("1"))
+        if (currentUser.getLevel().equals("1")) {
+            id.setTextColor(Color.GREEN);
+        } else if (currentUser.getLevel().equals("0")) {
             id.setTextColor(Color.RED);
-
+        }
         if (Utils.checkLevel(context) == 0) {
             translationXDP = 135;
         }
@@ -186,6 +189,7 @@ public class UsersAdapter extends BaseAdapter {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                holder.performClick();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context).setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle("Are you sure?")
                         .setMessage("This user will be deleted.").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -208,6 +212,7 @@ public class UsersAdapter extends BaseAdapter {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                holder.performClick();
                 View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_user, null);
                 AlertDialog.Builder editUserDialogBuilder = new AlertDialog.Builder(context);
                 editUserDialogBuilder.setView(view);
@@ -224,7 +229,8 @@ public class UsersAdapter extends BaseAdapter {
                 final Spinner levelSP = (Spinner) view.findViewById(R.id.level);
                 keep_empty.setVisibility(View.VISIBLE);
                 levelSP.setVisibility((Utils.checkLevel(context) == 0) ? View.VISIBLE : View.GONE);
-                levelSP.setSelection(Integer.parseInt(currentUser.getLevel()) - 1);
+                levelSP.setSelection(Integer.parseInt(currentUser.getLevel()));
+
                 emailET.setText(currentUser.getEmail());
 
                 editItem.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +240,10 @@ public class UsersAdapter extends BaseAdapter {
                         String passStr = passET.getText().toString().trim();
                         String pass2Str = pass2ET.getText().toString().trim();
                         String levelStr = String.valueOf(levelSP.getSelectedItemPosition());
+                        if (levelSP.getVisibility() == View.GONE) {
+                            levelStr = currentUser.getLevel();
+                        }
+                        Log.e("TAGE", levelStr);
                         if (emailStr.equals("") || emailStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
                         } else {
@@ -265,6 +275,7 @@ public class UsersAdapter extends BaseAdapter {
         user_times.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                holder.performClick();
                 Intent i = new Intent(context, MainActivityForUsers_AdminsView.class);
                 i.putExtra("userID", currentUser.getId());
                 context.startActivity(i);
