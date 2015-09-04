@@ -17,6 +17,7 @@ public class Constants {
     public static final String PREF_SESSION_ID = "user_session_id";
     public static final String PREF_API_KEY = "user_api_key";
     public static final String PREF_COOKIE = "cookie";
+    public static final String PREF_REPORT_LIST = "report_list";
 
 
 

@@ -16,7 +16,7 @@ import com.joggingtrackerapp.server.SignUp;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Utils;
 
-public class Login extends Activity {
+public class LoginActivity extends Activity {
     private boolean isSignUpFormVisible = false;
 
     private TextView changeFormTV;
@@ -36,7 +36,7 @@ public class Login extends Activity {
 
 
     public void Submit (View v) {
-        Utils.hideKeyboard(Login.this);
+        Utils.hideKeyboard(LoginActivity.this);
         if (isSignUpFormVisible) { // Sign up process
             String emailStr = emailET.getText().toString().trim();
             String passStr = passET.getText().toString().trim();
@@ -54,7 +54,7 @@ public class Login extends Activity {
                 Toast.makeText(this, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
                 return;
             }
-            new SignUp(Login.this).execute(emailStr, passStr, levelStr);
+            new SignUp(LoginActivity.this).execute(emailStr, passStr, levelStr);
         } else { // Login process
             String emailStr = emailET.getText().toString().trim();
             String passStr = passET.getText().toString().trim();
@@ -66,7 +66,7 @@ public class Login extends Activity {
                 Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show();
                 return;
             }
-            new CheckLogin(Login.this).execute(emailStr, passStr);
+            new CheckLogin(LoginActivity.this).execute(emailStr, passStr);
         }
     }
 
