@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.joggingtrackerapp.R;
 
@@ -150,5 +152,13 @@ public class Utils {
 
     public static int checkLevel (Context context) {
         return Integer.parseInt(MyPreferences.getString(context, Constants.PREF_LEVEL));
+    }
+    public static void hideKeyboard(Context context) {
+        // Check if no view has focus:
+        View view = ((Activity)context).getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }

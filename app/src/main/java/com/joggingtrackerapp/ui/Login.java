@@ -14,6 +14,7 @@ import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.server.CheckLogin;
 import com.joggingtrackerapp.server.SignUp;
 import com.joggingtrackerapp.utils.Checks;
+import com.joggingtrackerapp.utils.Utils;
 
 public class Login extends Activity {
     private boolean isSignUpFormVisible = false;
@@ -35,6 +36,7 @@ public class Login extends Activity {
 
 
     public void Submit (View v) {
+        Utils.hideKeyboard(Login.this);
         if (isSignUpFormVisible) { // Sign up process
             String emailStr = emailET.getText().toString().trim();
             String passStr = passET.getText().toString().trim();

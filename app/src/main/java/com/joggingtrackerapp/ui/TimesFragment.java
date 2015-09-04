@@ -72,7 +72,7 @@ public class TimesFragment extends Fragment {
         if (!filterEnabled)
             TimesFragment.allTimes = allTimes;
 
-        if (allTimes.size() == 0){
+        if (allTimes.size() == 0 && !filterEnabled){
             Toast.makeText(activity, "No Jogging Times Recorded Yet",Toast.LENGTH_SHORT).show();
         }
         adapter = new TimesAdapter(activity, allTimes);

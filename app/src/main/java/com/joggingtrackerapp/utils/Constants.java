@@ -5,7 +5,7 @@ package com.joggingtrackerapp.utils;
  */
 public class Constants {
 
-    public static final String API_URL = "http://5ba3e96b.ngrok.io/JoggingTrackerApp/v1/";
+    public static final String API_URL = "http://55a4b113.ngrok.io/JoggingTrackerApp/v1/";
 
     /* Log TAGS */
     public static final String TAG_ERROR = "JoggingTrackerAppERROR";
