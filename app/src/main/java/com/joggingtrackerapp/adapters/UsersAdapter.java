@@ -3,6 +3,7 @@ package com.joggingtrackerapp.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,13 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.User;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.server.DeleteUser;
+import com.joggingtrackerapp.server.EditUser;
+import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -172,52 +178,56 @@ public class UsersAdapter extends BaseAdapter {
             }
         });
 
-        /*edit.setOnClickListener(new View.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_time, null);
-                AlertDialog.Builder addTimeDialogBuilder = new AlertDialog.Builder(context);
-                addTimeDialogBuilder.setView(view);
-                addTimeDialogBuilder.setCancelable(true);
+                View view = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_add_user, null);
+                AlertDialog.Builder editUserDialogBuilder = new AlertDialog.Builder(context);
+                editUserDialogBuilder.setView(view);
+                editUserDialogBuilder.setCancelable(true);
 
                 // Listeners
-                Button editItem = (Button) view.findViewById(R.id.addItem);
+                Button editItem = (Button) view.findViewById(R.id.addUser);
                 editItem.setText("Edit");
                 Button cancel = (Button) view.findViewById(R.id.cancel);
-                final EditText time = (EditText) view.findViewById(R.id.time);
-                final EditText distance = (EditText) view.findViewById(R.id.distance);
-                final DatePicker date = (DatePicker) view.findViewById(R.id.date);
-
-                time.setText(currentTime.getTime());
-                distance.setText(currentTime.getDistance());
-                date.init(Integer.parseInt(currentTime.getDate().substring(0, 4)),
-                        Integer.parseInt(currentTime.getDate().substring(5, 7)),
-                        Integer.parseInt(currentTime.getDate().substring(8, 10)), null);
+                final EditText emailET = (EditText) view.findViewById(R.id.email);
+                final EditText passET = (EditText) view.findViewById(R.id.pass);
+                final EditText pass2ET = (EditText) view.findViewById(R.id.pass2);
+                TextView keep_empty = (TextView) view.findViewById(R.id.keep_empty);
+                keep_empty.setVisibility(View.VISIBLE);
+                emailET.setText(currentUser.getEmail());
 
                 editItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick (View v) {
-                        String timeStr = time.getText().toString().trim();
-                        String distanceStr = distance.getText().toString().trim();
-                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDayOfMonth());
-                        if (timeStr.equals("") || timeStr == null || distanceStr.equals("") || distanceStr == null ||
-                                dateStr.trim().equals("") || dateStr == null) {
+                        String emailStr = emailET.getText().toString().trim();
+                        String passStr = passET.getText().toString().trim();
+                        String pass2Str = pass2ET.getText().toString().trim();
+                        if (emailStr.equals("") || emailStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
                         } else {
-                            new EditTime(context, editTimeDialog).execute(dateStr, timeStr, distanceStr, currentTime.getId(), String.valueOf(position));
+                            if (!Checks.isEmailValid(emailStr)) {
+                                Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (!pass2Str.trim().equals(passStr.trim())) {
+                                    Toast.makeText(context, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    new EditUser(context, editUserDialog).execute(emailStr, passStr, currentUser.getId(), String.valueOf(position));
+                                }
+                            }
                         }
                     }
                 });
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick (View v) {
-                        editTimeDialog.dismiss();
+                        editUserDialog.dismiss();
                     }
                 });
-                editTimeDialog = addTimeDialogBuilder.show();
+                editUserDialog = editUserDialogBuilder.show();
             }
-        });*/
+        });
         // Animation
         if (!stopAnimation) {
             ObjectAnimator addHolderAnimationY = ObjectAnimator.ofFloat(

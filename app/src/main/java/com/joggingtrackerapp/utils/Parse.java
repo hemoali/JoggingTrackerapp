@@ -123,7 +123,19 @@ public class Parse {
         }
         return AddData;
     }
+    public static String[] parseUpdateUserData (String result) {
+        String[] AddData = new String[2];
+        try {
+            JSONObject jsonObj = new JSONObject(result);
 
+            AddData[0] = jsonObj.getString("status");
+            AddData[1] = jsonObj.getString("status_message");
+
+        } catch (JSONException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return AddData;
+    }
     public static ArrayList<Time> parseTimes (Context context, String result) {
         ArrayList<Time> times = new ArrayList<>();
         try {
