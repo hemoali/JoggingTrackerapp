@@ -87,7 +87,7 @@ public class Utils {
         String Year = date.substring(0, 4);
 
 
-        switch (Month + 1) {
+        switch (Month) {
             case 1:
                 month = context.getResources().getString(R.string.jan);
                 break;

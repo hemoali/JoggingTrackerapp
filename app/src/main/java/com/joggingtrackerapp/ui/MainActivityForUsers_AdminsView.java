@@ -119,7 +119,7 @@ public class MainActivityForUsers_AdminsView extends AppCompatActivity {
                     public void onClick (View v) {
                         String timeStr = time.getText().toString().trim();
                         String distanceStr = distance.getText().toString().trim();
-                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDayOfMonth());
+                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth() + 1) + "-" + String.format("%02d", date.getDayOfMonth());
                         if (timeStr.equals("") || timeStr == null || distanceStr.equals("") || distanceStr == null ||
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
@@ -172,8 +172,8 @@ public class MainActivityForUsers_AdminsView extends AppCompatActivity {
                 filterItems.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick (View v) {
-                        String fromDateStr = fromDate.getYear() + "-" + String.format("%02d", fromDate.getMonth()) + "-" + String.format("%02d", fromDate.getDayOfMonth());
-                        String toDateStr = toDate.getYear() + "-" + String.format("%02d", toDate.getMonth()) + "-" + String.format("%02d", toDate.getDayOfMonth());
+                        String fromDateStr = fromDate.getYear() + "-" + String.format("%02d", fromDate.getMonth() + 1) + "-" + String.format("%02d", fromDate.getDayOfMonth());
+                        String toDateStr = toDate.getYear() + "-" + String.format("%02d", toDate.getMonth() + 1) + "-" + String.format("%02d", toDate.getDayOfMonth());
                         if (toDateStr.equals("") || toDateStr == null ||
                                 fromDateStr.trim().equals("") || fromDateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();

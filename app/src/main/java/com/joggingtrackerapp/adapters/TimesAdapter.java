@@ -199,7 +199,7 @@ public class TimesAdapter extends BaseAdapter {
                     public void onClick (View v) {
                         String timeStr = time.getText().toString().trim();
                         String distanceStr = distance.getText().toString().trim();
-                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDayOfMonth());
+                        String dateStr = date.getYear() + "-" + String.format("%02d", date.getMonth() + 1) + "-" + String.format("%02d", date.getDayOfMonth());
                         if (timeStr.equals("") || timeStr == null || distanceStr.equals("") || distanceStr == null ||
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
