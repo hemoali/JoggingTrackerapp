@@ -88,7 +88,7 @@ public class SignUp extends AsyncTask<String, Void, String> {
 
             String cookie = conn.getHeaderField("set-cookie");
             //Get Cookie from connection
-            if (cookie != null && cookie.length() > 0 && Session.getsCookie(context) == null) {
+            if (cookie != null && cookie.length() > 0) {
                 Session.setsCookie(context, cookie);
             }
 

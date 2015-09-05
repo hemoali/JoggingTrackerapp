@@ -124,7 +124,9 @@ public class MainActivityForUsers_AdminsView extends AppCompatActivity {
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
-                        } else {
+                        }else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0) {
+                            Toast.makeText(activity, "Invalid Values", Toast.LENGTH_SHORT).show();
+                        }  else {
                             new AddTime(activity, userID).execute(dateStr, timeStr, distanceStr);
                         }
                     }

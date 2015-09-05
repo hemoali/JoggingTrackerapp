@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.joggingtrackerapp.Objects.Time;
@@ -23,6 +24,7 @@ import com.joggingtrackerapp.server.AddTime;
 import com.joggingtrackerapp.server.AddUser;
 import com.joggingtrackerapp.utils.Checks;
 import com.joggingtrackerapp.utils.SlidingTabLayout;
+import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +108,8 @@ public class MainActivityForManagers extends AppCompatActivity {
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
+                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0) {
+                            Toast.makeText(activity, "Invalid Values", Toast.LENGTH_SHORT).show();
                         } else {
                             new AddTime(activity).execute(dateStr, timeStr, distanceStr);
                         }
@@ -201,6 +205,9 @@ public class MainActivityForManagers extends AppCompatActivity {
                 final EditText emailET = (EditText) addUserView.findViewById(R.id.email);
                 final EditText passET = (EditText) addUserView.findViewById(R.id.pass);
                 final EditText pass2ET = (EditText) addUserView.findViewById(R.id.pass2);
+                final Spinner levelSP = (Spinner) addUserView.findViewById(R.id.level);
+                levelSP.setVisibility((Utils.checkLevel(activity) == 0) ? View.VISIBLE : View.GONE);
+                levelSP.setSelection(2);
 
                 addUser.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -208,6 +215,8 @@ public class MainActivityForManagers extends AppCompatActivity {
                         String emailStr = emailET.getText().toString().trim();
                         String passStr = passET.getText().toString().trim();
                         String pass2Str = pass2ET.getText().toString().trim();
+                        String levelStr = String.valueOf(levelSP.getSelectedItemPosition());
+
                         if (emailStr.length() <= 0 || passStr.length() <= 0 || pass2ET.length() <= 0) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
                             return;
@@ -220,7 +229,12 @@ public class MainActivityForManagers extends AppCompatActivity {
                             Toast.makeText(activity, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        new AddUser(activity).execute(emailStr, passStr);
+                        if (!levelStr.equals("0") && !levelStr.equals("1") && !levelStr.equals("2")) {
+                            Toast.makeText(activity, "Invalid Level", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        new AddUser(activity).execute(emailStr, passStr, levelStr);
                     }
                 });
                 addUserCancel.setOnClickListener(new View.OnClickListener() {

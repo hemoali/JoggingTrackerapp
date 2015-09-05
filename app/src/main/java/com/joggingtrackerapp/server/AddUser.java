@@ -39,7 +39,7 @@ import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 public class AddUser extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
-    private String emailStr, passStr;
+    private String emailStr, passStr, levelStr;
 
     public AddUser (Context context) {
         this.context = context;
@@ -62,6 +62,7 @@ public class AddUser extends AsyncTask<String, Void, String> {
         if (!Checks.isNetworkAvailable(context)) return null;
         emailStr = params[0];
         passStr = params[1];
+        levelStr = params[2];
         try {
             URL url = new URL(API_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -77,7 +78,8 @@ public class AddUser extends AsyncTask<String, Void, String> {
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("task", "add_user")
                     .appendQueryParameter("email", emailStr)
-                    .appendQueryParameter("pass", passStr);
+                    .appendQueryParameter("pass", passStr)
+                    .appendQueryParameter("level", levelStr);
 
             String query = builder.build().getEncodedQuery();
 
@@ -122,7 +124,8 @@ public class AddUser extends AsyncTask<String, Void, String> {
                 User u = new User();
                 u.setId(addData[2]);
                 u.setEmail(emailStr);
-
+                u.setLevel(levelStr);
+                
                 if (context instanceof MainActivityForManagers) {
                     UsersFragment.addRecordToLV(u);
                     ((MainActivityForManagers) context).dismissAddUserDialog();

@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -243,7 +242,6 @@ public class UsersAdapter extends BaseAdapter {
                         if (levelSP.getVisibility() == View.GONE) {
                             levelStr = currentUser.getLevel();
                         }
-                        Log.e("TAGE", levelStr);
                         if (emailStr.equals("") || emailStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
                         } else {
