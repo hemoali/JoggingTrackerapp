@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,8 +13,15 @@ import android.view.inputmethod.InputMethodManager;
 import com.joggingtrackerapp.R;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
+
+import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
  * Created by ibrahimradwan on 9/2/15.
@@ -47,6 +55,20 @@ public class Utils {
     public static float dpToPx (Context context, int dp) {
         Resources r = context.getResources();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+    }
+
+    public static long getDaysInBetween (String timeDate, Context context) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String registerationDate = MyPreferences.getString(context, Constants.PREF_REG_DATE);
+        try {
+            Date date1 = dateFormat.parse(timeDate);
+            Date date2 = dateFormat.parse(registerationDate);
+            long diff = date1.getTime() - date2.getTime();
+            return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        } catch (ParseException e) {
+            Log.e(TAG_ERROR, "Error: " + e.getMessage());
+        }
+        return 0;
     }
 
     public static String formattedDate (Context context, String date) {
@@ -153,9 +175,10 @@ public class Utils {
     public static int checkLevel (Context context) {
         return Integer.parseInt(MyPreferences.getString(context, Constants.PREF_LEVEL));
     }
-    public static void hideKeyboard(Context context) {
+
+    public static void hideKeyboard (Context context) {
         // Check if no view has focus:
-        View view = ((Activity)context).getCurrentFocus();
+        View view = ((Activity) context).getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

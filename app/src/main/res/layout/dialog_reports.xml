@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/no_reports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="No Reports"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
+    <ListView
+        android:id="@+id/listview_reports"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="#ffffff"
+        android:divider="#00FFCC00"
+        android:dividerHeight="8dp"
+        android:padding="10dp">
+    </ListView>
+</RelativeLayout>

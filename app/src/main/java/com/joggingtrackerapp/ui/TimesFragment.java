@@ -77,6 +77,8 @@ public class TimesFragment extends Fragment {
         }
         adapter = new TimesAdapter(activity, allTimes);
         listview_times.setAdapter(adapter);
+
+        MainActivityForManagers.fillReportsListView(allTimes);
     }
 
 

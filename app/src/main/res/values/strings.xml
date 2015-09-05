@@ -16,6 +16,7 @@
     <string name="menu_add_user">Add User</string>
     <string name="menu_cancel_item">Cancel</string>
     <string name="menu_filter">Filter</string>
+    <string name="menu_reports">Reports</string>
 
     <string-array name="levels_array">
         <item>Admin</item>

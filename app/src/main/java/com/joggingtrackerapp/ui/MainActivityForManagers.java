@@ -2,6 +2,7 @@ package com.joggingtrackerapp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,11 +15,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.joggingtrackerapp.Objects.Report;
 import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
+import com.joggingtrackerapp.adapters.ReportAdapter;
 import com.joggingtrackerapp.adapters.SamplePagerAdapter;
 import com.joggingtrackerapp.server.AddTime;
 import com.joggingtrackerapp.server.AddUser;
@@ -27,6 +32,8 @@ import com.joggingtrackerapp.utils.SlidingTabLayout;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -34,10 +41,12 @@ import java.util.List;
  * Created by ibrahimradwan on 9/3/15.
  */
 public class MainActivityForManagers extends AppCompatActivity {
+    private static ReportAdapter reportAdapter;
     private ViewPager viewPager;
     private SamplePagerAdapter samplePagerAdapter;
-    private Activity activity;
+    private static Activity activity;
     private static AlertDialog addTimeDialog, filterTimesDialog, addUserDialog;
+    private static ArrayList<Report> allReports;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -59,8 +68,8 @@ public class MainActivityForManagers extends AppCompatActivity {
         SlidingTabLayout sliding_tabs = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         sliding_tabs.setDistributeEvenly(true);
         sliding_tabs.setViewPager(viewPager);
-    }
 
+    }
 
     private List<Fragment> getFragments () {
 
@@ -73,10 +82,55 @@ public class MainActivityForManagers extends AppCompatActivity {
 
     }
 
+    public static void fillReportsListView (ArrayList<Time> allTimes) {
+        allReports = new ArrayList<>();
+
+
+        for (int i = 0; i < allTimes.size(); i++) {
+            Time time = allTimes.get(i);
+            long daysInBetween = Utils.getDaysInBetween(time.getDate(), activity);
+            int weekNo = (int) Math.ceil(daysInBetween / 7.0);
+
+            boolean weekCreated = false;
+            Report oldReport = null;
+            for (Report r : allReports) {
+                if (r.getNo() == weekNo) {
+                    weekCreated = true;
+                    oldReport = r;
+                }
+            }
+            if (weekCreated) {
+                int reportDistance = Integer.parseInt(oldReport.getDistance());
+                int reportTime = Integer.parseInt(oldReport.getTime());
+                int reportTimesCount = Integer.parseInt(oldReport.getTimesCount());
+
+                oldReport.setDistance(String.valueOf(reportDistance + Integer.parseInt(time.getDistance())));
+                oldReport.setTime(String.valueOf(reportTime + Integer.parseInt(time.getTime())));
+                oldReport.setTimesCount(String.valueOf(++reportTimesCount));
+
+            } else {
+                Report newReport = new Report();
+                newReport.setNo(weekNo);
+                newReport.setTimesCount("1");
+                newReport.setDistance(time.getDistance());
+                newReport.setTime(time.getTime());
+                allReports.add(newReport);
+            }
+        }
+        Collections.sort(allReports, new Comparator<Report>() {
+            @Override
+            public int compare (Report p1, Report p2) {
+                return  p2.getNo() - p1.getNo();
+            }
+
+        });
+        reportAdapter = new ReportAdapter(activity, allReports);
+    }
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_times_users, menu);
+        menuInflater.inflate(R.menu.menu_times_users_with_reports, menu);
         return true;
     }
 
@@ -84,6 +138,22 @@ public class MainActivityForManagers extends AppCompatActivity {
     public boolean onOptionsItemSelected (MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.menu_reports:
+                View getReportsView = getLayoutInflater().inflate(R.layout.dialog_reports, null);
+                getReportsView.setBackgroundColor(Color.WHITE);
+                AlertDialog.Builder getReportsDialogBuilder = new AlertDialog.Builder(this);
+                getReportsDialogBuilder.setView(getReportsView);
+                getReportsDialogBuilder.setCancelable(true);
+
+                ListView listview_reports = (ListView) getReportsView.findViewById(R.id.listview_reports);
+                TextView no_reports = (TextView) getReportsView.findViewById(R.id.no_reports);
+                if (allReports.size() == 0) {
+                    no_reports.setVisibility(View.VISIBLE);
+                    listview_reports.setVisibility(View.GONE);
+                }
+                listview_reports.setAdapter(reportAdapter);
+                getReportsDialogBuilder.show();
+                return true;
             case R.id.menu_add_time:
                 View view = getLayoutInflater().inflate(R.layout.dialog_add_time, null);
 

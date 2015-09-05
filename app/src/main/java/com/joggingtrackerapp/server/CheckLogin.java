@@ -27,9 +27,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
 import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
@@ -129,8 +126,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
                         MyPreferences.add(context, Constants.PREF_SESSION_ID, loginData[2], "string");
                         MyPreferences.add(context, Constants.PREF_LEVEL, loginData[3], "string");
                         MyPreferences.add(context, Constants.PREF_API_KEY, loginData[4], "string");
-
-                        addToWeeklyReportList();
+                        MyPreferences.add(context, Constants.PREF_REG_DATE, loginData[5], "string");
 
                         Utils.moveAfterLoginOrSignup(context, (loginData[3].equals("2")) ? MainActivityForUsers.class : MainActivityForManagers.class, true);
 
@@ -147,36 +143,6 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
     }
 
-    private void addToWeeklyReportList () { // for signup too
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Calendar cal = Calendar.getInstance();
-        String currentDate = dateFormat.format(cal.getTime());
-
-        boolean add = true;
-
-        if (MyPreferences.getString(context, Constants.PREF_REPORT_LIST) != null && !MyPreferences.getString(context, Constants.PREF_REPORT_LIST).trim().equals("")) {
-            String oldReportList = MyPreferences.getString(context, Constants.PREF_REPORT_LIST);
-
-            for (String s : oldReportList.split(";")) {
-                Log.e(TAG_ERROR, s.split(":")[0]);
-                if (s.split(":")[0].equalsIgnoreCase(emailStr)) {
-                    add = false;
-                }
-            }
-            if (add) {
-                oldReportList = oldReportList.concat(emailStr + ":" + currentDate + ";");
-                MyPreferences.add(context, Constants.PREF_REPORT_LIST, oldReportList, "string");
-            }
-        } else {
-            String ReportList = (emailStr + ":" + currentDate + ";");
-            MyPreferences.add(context, Constants.PREF_REPORT_LIST, ReportList, "string");
-        }
-        if (add){
-            //Register notification
-        }
-        Log.d(TAG_DEBUG, MyPreferences.getString(context, Constants.PREF_REPORT_LIST));
-    }
 
     public void stop () {
         onPostExecute(null);

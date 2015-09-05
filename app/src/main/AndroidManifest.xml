@@ -36,6 +36,7 @@
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/jogging_times" />
+        <service android:name=".services.AlarmService"/>
     </application>
 
 </manifest>

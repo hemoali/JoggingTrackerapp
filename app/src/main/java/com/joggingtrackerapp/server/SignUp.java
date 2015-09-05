@@ -126,6 +126,7 @@ public class SignUp extends AsyncTask<String, Void, String> {
                             MyPreferences.add(context, Constants.PREF_SESSION_ID, signupData[2], "string");
                             MyPreferences.add(context, Constants.PREF_LEVEL, levelStr, "string");
                             MyPreferences.add(context, Constants.PREF_API_KEY, signupData[3], "string");
+                            MyPreferences.add(context, Constants.PREF_REG_DATE, signupData[4], "string");
 
                             Utils.moveAfterLoginOrSignup(context, (levelStr.equals("2")) ? MainActivityForUsers.class : MainActivityForManagers.class, true);
 
