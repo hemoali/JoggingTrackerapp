@@ -147,7 +147,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
     }
 
-    private void addToWeeklyReportList () {
+    private void addToWeeklyReportList () { // for signup too
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar cal = Calendar.getInstance();

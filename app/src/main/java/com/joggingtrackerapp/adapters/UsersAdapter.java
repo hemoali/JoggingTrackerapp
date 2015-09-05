@@ -1,7 +1,6 @@
 package com.joggingtrackerapp.adapters;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,20 +36,12 @@ import java.util.ArrayList;
 public class UsersAdapter extends BaseAdapter {
     private Context context;
     private static ArrayList<User> allUsers;
-    private boolean stopAnimation = false;
     private AlertDialog editUserDialog;
     private int translationXDP = 90;
 
     public UsersAdapter (Context c, ArrayList<User> allUsers) {
         context = c;
         this.allUsers = allUsers;
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run () {
-                stopAnimation = true;
-            }
-        }, 2000);
     }
 
 
@@ -279,23 +269,7 @@ public class UsersAdapter extends BaseAdapter {
                 context.startActivity(i);
             }
         });
-        // Animation
-        if (!stopAnimation) {
-            ObjectAnimator addHolderAnimationY = ObjectAnimator.ofFloat(
-                    holder, "translationY", Utils.getScreenDiem(context)[1], 0);
-            addHolderAnimationY.setDuration(800);
 
-            ObjectAnimator addHolderAnimationX = ObjectAnimator.ofFloat(
-                    holder, "translationX", (position % 2 == 0) ? Utils.getScreenDiem(context)[0]
-                            : -Utils.getScreenDiem(context)[0], 0);
-            addHolderAnimationX.setDuration(800);
-
-            AnimatorSet animset = new AnimatorSet();
-
-            animset.play(addHolderAnimationY).with(addHolderAnimationX);
-
-            animset.start();
-        }
         return holder;
     }
 }
