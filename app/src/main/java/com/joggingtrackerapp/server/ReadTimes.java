@@ -33,7 +33,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
-import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
@@ -133,7 +132,6 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG_DEBUG, result);
             ArrayList<Time> allTimes = Parse.parseTimes(context, result);
             if (context instanceof MainActivityForUsers) {
                 ((MainActivityForUsers) context).fillTimesListView(allTimes, false);

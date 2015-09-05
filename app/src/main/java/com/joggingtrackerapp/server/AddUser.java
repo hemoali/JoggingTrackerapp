@@ -30,7 +30,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
-import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
@@ -116,7 +115,6 @@ public class AddUser extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG_DEBUG, result);
             String[] addData = Parse.parseAddUserData(result);
             if (addData[0].trim().equals("200") && addData[1].trim().equals("User Add Succeeded")) {
                 Toast.makeText(context, "User Added Successfully", Toast.LENGTH_SHORT).show();

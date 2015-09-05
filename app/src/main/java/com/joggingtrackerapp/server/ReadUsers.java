@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import static com.joggingtrackerapp.utils.Constants.API_URL;
-import static com.joggingtrackerapp.utils.Constants.TAG_DEBUG;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
 /**
@@ -79,7 +78,6 @@ public class ReadUsers extends AsyncTask<String, Void, String> {
                 conn.setRequestProperty("Cookie", Session.getsCookie(context));
             }
             Uri.Builder builder;
-            Log.e(TAG_ERROR, Utils.checkLevel(context) +"");
             if (Utils.checkLevel(context) == 0) {
                 builder = new Uri.Builder()
                         .appendQueryParameter("task", "getUsers_ForAdmins");
@@ -122,7 +120,6 @@ public class ReadUsers extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d(TAG_DEBUG, result);
             ArrayList<User> allUsers = Parse.parseUsers(context, result);
             if (context instanceof MainActivityForManagers) {
                 usersFragment.fillUsersListView(allUsers);
