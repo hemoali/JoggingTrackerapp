@@ -244,7 +244,11 @@ public class UsersAdapter extends BaseAdapter {
                                     if (!levelStr.equals("0") && !levelStr.equals("1") && !levelStr.equals("2")) {
                                         Toast.makeText(context, "Invalid Level", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        new EditUser(context, editUserDialog, levelStr).execute(emailStr, passStr, currentUser.getId(), String.valueOf(position));
+                                        if (passStr.trim().length() > 0 && (passStr.trim().length() < 8)) {
+                                            Toast.makeText(context, "Password Must Be 8 or More Characters", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            new EditUser(context, editUserDialog, levelStr).execute(emailStr, passStr, currentUser.getId(), String.valueOf(position));
+                                        }
                                     }
                                 }
                             }

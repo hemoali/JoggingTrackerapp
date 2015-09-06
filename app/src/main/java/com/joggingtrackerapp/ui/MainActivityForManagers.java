@@ -303,7 +303,10 @@ public class MainActivityForManagers extends AppCompatActivity {
                             Toast.makeText(activity, "Invalid Level", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
+                        if (passStr.trim().length() < 8) {
+                            Toast.makeText(activity, "Password Must Be 8 or More Characters", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         new AddUser(activity).execute(emailStr, passStr, levelStr);
                     }
                 });

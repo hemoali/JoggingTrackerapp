@@ -54,6 +54,14 @@ public class LoginActivity extends Activity {
                 Toast.makeText(this, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (!levelStr.equals("0") && !levelStr.equals("1") && !levelStr.equals("2")) {
+                Toast.makeText(this, "Invalid Level", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (passStr.trim().length() < 8) {
+                Toast.makeText(this, "Password Must Be 8 or More Characters", Toast.LENGTH_SHORT).show();
+                return;
+            }
             new SignUp(LoginActivity.this).execute(emailStr, passStr, levelStr);
         } else { // Login process
             String emailStr = emailET.getText().toString().trim();
