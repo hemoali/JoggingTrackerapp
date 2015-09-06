@@ -80,10 +80,9 @@ public class MainActivityForUsers_AdminsView extends AppCompatActivity {
 
         if (allTimes.size() == 0 && !filterEnabled) {
             Toast.makeText(activity, "No Jogging Times Recorded Yet", Toast.LENGTH_SHORT).show();
-        } else {
+        }
             adapter = new TimesAdapter(activity, allTimes);
             listview_times.setAdapter(adapter);
-        }
     }
 
     @Override

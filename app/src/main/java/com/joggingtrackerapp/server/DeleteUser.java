@@ -113,6 +113,7 @@ public class DeleteUser extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
+
             String[] deleteData = Parse.parseDeleteUserData(result);
             if (deleteData[0].trim().equals("200")) {
                 Toast.makeText(context, "User Deleted Successfully", Toast.LENGTH_SHORT).show();

@@ -132,6 +132,7 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
+
             ArrayList<Time> allTimes = Parse.parseTimes(context, result);
             if (context instanceof MainActivityForUsers) {
                 ((MainActivityForUsers) context).fillTimesListView(allTimes, false);
