@@ -12,7 +12,7 @@
         android:background="#ffffff"
         android:text="No Reports"
         android:textSize="14sp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/listview_reports"
@@ -23,7 +23,7 @@
         android:background="#ffffff"
         android:divider="#00FFCC00"
         android:dividerHeight="8dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:padding="10dp">
     </ListView>
 </RelativeLayout>
