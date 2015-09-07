@@ -71,7 +71,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:hint="@string/pass"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:lines="1"
             android:maxLines="1"

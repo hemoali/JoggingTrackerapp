@@ -54,7 +54,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:hint="@string/distance"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:lines="1"
                 android:maxLength="5"
