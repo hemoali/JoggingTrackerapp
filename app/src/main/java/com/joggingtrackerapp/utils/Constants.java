@@ -1,8 +1,6 @@
 package com.joggingtrackerapp.utils;
 
-/**
- * Created by ibrahim on 6/22/15.
- */
+
 public class Constants {
 
     public static final String API_URL = "http://joggingtrackerapp.herokuapp.com/v2/";
@@ -18,7 +16,6 @@ public class Constants {
     public static final String PREF_SESSION_ID = "user_session_id";
     public static final String PREF_API_KEY = "user_api_key";
     public static final String PREF_COOKIE = "cookie";
-//    public static final String PREF_REPORT_LIST = "report_list";
     public static final String PREF_REG_DATE = "user_reg_date";
 
 

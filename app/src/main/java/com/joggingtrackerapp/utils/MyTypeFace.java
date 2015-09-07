@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public class MyTypeFace {
 
-	public static Typeface getFont(String fontName, Context context) {
+	private static Typeface getFont(String fontName, Context context) {
 		return Typeface.createFromAsset(context.getAssets(), "fonts/"
 				+ fontName);
 	}

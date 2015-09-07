@@ -58,7 +58,7 @@ public class EditTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000);
     }
 
     @Override

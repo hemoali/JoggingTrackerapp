@@ -8,8 +8,8 @@ import java.io.Serializable;
  * Created by ibrahimradwan on 9/3/15.
  */
 public class Time implements Serializable {
-    String id, user_id, date, time, distance;
-    boolean optionsVisible = false;
+    private String id, user_id, date, time, distance;
+    private boolean optionsVisible = false;
 
     public boolean isOptionsVisible () {
         return optionsVisible;
@@ -25,10 +25,6 @@ public class Time implements Serializable {
 
     public void setId (String id) {
         this.id = id;
-    }
-
-    public String getUser_id () {
-        return user_id;
     }
 
     public void setUser_id (String user_id) {

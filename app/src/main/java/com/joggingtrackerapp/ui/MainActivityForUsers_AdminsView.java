@@ -23,6 +23,9 @@ import com.joggingtrackerapp.adapters.ReportAdapter;
 import com.joggingtrackerapp.adapters.TimesAdapter;
 import com.joggingtrackerapp.server.AddTime;
 import com.joggingtrackerapp.server.ReadTimes;
+import com.joggingtrackerapp.utils.Checks;
+import com.joggingtrackerapp.utils.Constants;
+import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -59,7 +62,7 @@ public class MainActivityForUsers_AdminsView extends CommonActivity {
 
     }
 
-    public static void fillReportsListView (ArrayList<Time> allTimes) {
+    private static void fillReportsListView (ArrayList<Time> allTimes) {
         allReports = new ArrayList<>();
 
 
@@ -195,8 +198,10 @@ public class MainActivityForUsers_AdminsView extends CommonActivity {
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
-                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0) {
+                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0 || !Checks.isNumeric(timeStr) || !Checks.isNumeric(distanceStr)) {
                             Toast.makeText(activity, "Invalid Values", Toast.LENGTH_SHORT).show();
+                        } else if (dateStr.compareTo(MyPreferences.getString(activity, Constants.PREF_REG_DATE)) < 0) {
+                            Toast.makeText(activity, "Invalid Date", Toast.LENGTH_SHORT).show();
                         } else {
                             new AddTime(activity, userID).execute(dateStr, timeStr, distanceStr);
                         }
@@ -249,7 +254,7 @@ public class MainActivityForUsers_AdminsView extends CommonActivity {
                         } else if (fromDateStr.compareTo(toDateStr) > 0) {
                             Toast.makeText(activity, "'From' Date Must Be Before 'To' Date", Toast.LENGTH_SHORT).show();
                         } else {
-                            ArrayList<Time> filteredItems = new ArrayList<Time>();
+                            ArrayList<Time> filteredItems = new ArrayList<>();
                             for (Time t : allTimes) {
                                 String date = t.getDate();
                                 if (date.compareTo(fromDateStr) >= 0 && date.compareTo(toDateStr) <= 0) {

@@ -15,7 +15,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +27,8 @@ import com.joggingtrackerapp.adapters.SamplePagerAdapter;
 import com.joggingtrackerapp.server.AddTime;
 import com.joggingtrackerapp.server.AddUser;
 import com.joggingtrackerapp.utils.Checks;
+import com.joggingtrackerapp.utils.Constants;
+import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.SlidingTabLayout;
 import com.joggingtrackerapp.utils.Utils;
 
@@ -177,8 +178,10 @@ public class MainActivityForManagers extends CommonActivity {
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(activity, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
-                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0) {
+                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0 || !Checks.isNumeric(timeStr) || !Checks.isNumeric(distanceStr)) {
                             Toast.makeText(activity, "Invalid Values", Toast.LENGTH_SHORT).show();
+                        } else if (dateStr.compareTo(MyPreferences.getString(activity, Constants.PREF_REG_DATE)) < 0) {
+                            Toast.makeText(activity, "Invalid Date", Toast.LENGTH_SHORT).show();
                         } else {
                             new AddTime(activity).execute(dateStr, timeStr, distanceStr);
                         }
@@ -231,7 +234,7 @@ public class MainActivityForManagers extends CommonActivity {
                         } else if (fromDateStr.compareTo(toDateStr) > 0) {
                             Toast.makeText(activity, "'From' Date Must Be Before 'To' Date", Toast.LENGTH_SHORT).show();
                         } else {
-                            ArrayList<Time> filteredItems = new ArrayList<Time>();
+                            ArrayList<Time> filteredItems = new ArrayList<>();
                             for (Time t : TimesFragment.getAllTimes()) {
                                 String date = t.getDate();
                                 if (date.compareTo(fromDateStr) >= 0 && date.compareTo(toDateStr) <= 0) {

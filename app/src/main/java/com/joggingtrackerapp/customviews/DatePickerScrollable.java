@@ -6,9 +6,6 @@ import android.view.MotionEvent;
 import android.view.ViewParent;
 import android.widget.DatePicker;
 
-/**
- * Created by ibrahimradwan on 9/3/15.
- */
 public class DatePickerScrollable extends DatePicker {
 
     public DatePickerScrollable (Context context) {

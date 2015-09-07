@@ -55,7 +55,7 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000);
 
     }
 
@@ -121,11 +121,11 @@ public class DeleteTime extends AsyncTask<String, Void, String> {
                 Toast.makeText(context, "Record Deleted Successfully", Toast.LENGTH_SHORT).show();
                 if (context instanceof MainActivityForUsers) {
 
-                    ((MainActivityForUsers) context).removeRecordFromLV(position);
+                    MainActivityForUsers.removeRecordFromLV(position);
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.removeRecordFromLV(position);
                 } else if (context instanceof MainActivityForUsers_AdminsView) {
-                    ((MainActivityForUsers_AdminsView) context).removeRecordFromLV(position);
+                    MainActivityForUsers_AdminsView.removeRecordFromLV(position);
                 }
             } else {
                 Toast.makeText(context, deleteData[1], Toast.LENGTH_SHORT).show();

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="No Users To Update"
+        android:text="@string/no_users_to_update"
         android:visibility="gone"
         android:textSize="14sp" />
 

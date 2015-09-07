@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:background="#ffffff"
-        android:text="No Reports"
+        android:text="@string/no_reports"
         android:textSize="14sp"
         android:visibility="gone"/>
 

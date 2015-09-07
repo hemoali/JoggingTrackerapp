@@ -10,9 +10,7 @@ import java.net.HttpCookie;
 import java.net.URI;
 import java.util.List;
 
-/**
- * Created by ibrahimradwan on 9/2/15.
- */
+
 public class application extends Application {
     @Override
     public void onCreate () {

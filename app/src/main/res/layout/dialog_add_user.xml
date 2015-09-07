@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="30dp"
-    android:fillViewport="true"
-    android:padding="10dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30dp"
+            android:fillViewport="true"
+            android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,10 +20,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:gravity="left"
-            android:text="** Leave password fields empty to keep the old password"
+            android:text="@string/leave_empty_pass"
             android:textColor="#B00000"
             android:textSize="10sp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/email"
@@ -42,7 +42,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:textColor="#45484d"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <EditText
             android:id="@+id/pass"
@@ -60,7 +60,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:textColor="#45484d"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <EditText
             android:id="@+id/pass2"
@@ -78,7 +78,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:textColor="#45484d"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <Spinner
             android:id="@+id/level"
@@ -88,24 +88,13 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:entries="@array/levels_array"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/addUser"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/menu_add_item" />
 
             <Button
                 android:id="@+id/cancel"
@@ -116,13 +105,25 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/menu_cancel_item" />
+                android:text="@string/menu_cancel_item"/>
+
+            <Button
+                android:id="@+id/addUser"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/menu_add_item"/>
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            android:background="#00000000" />
+            android:background="#00000000"/>
     </LinearLayout>
 </ScrollView>

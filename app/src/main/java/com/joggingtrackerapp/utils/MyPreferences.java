@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class MyPreferences {
-	static SharedPreferences sharedPreferences;
-	static SharedPreferences.Editor prefsEditor;
+	private static SharedPreferences sharedPreferences;
+	private static SharedPreferences.Editor prefsEditor;
 
 	public static void add(Context context, String key, String value,
 			String type) {
@@ -30,7 +30,7 @@ public class MyPreferences {
 		return null;
 	}
 
-	public static void InitPreferences(Context context) {
+	private static void InitPreferences(Context context) {
 		sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 	}

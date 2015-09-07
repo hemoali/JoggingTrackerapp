@@ -36,6 +36,8 @@
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/jogging_times" />
+        <activity
+            android:name=".ui.CommonActivity" />
     </application>
 
 </manifest>

@@ -11,9 +11,7 @@ import com.joggingtrackerapp.utils.Constants;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by ibrahimradwan on 9/7/15.
- */
+
 public class CommonActivity extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {

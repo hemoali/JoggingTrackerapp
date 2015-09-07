@@ -10,6 +10,16 @@
     <string name="distance">Distance (m)</string>
     <string name="reset">Reset</string>
 
+    <string name="no_users_to_update">No Users To Update</string>
+    <string name="leave_empty_pass">** Leave password fields empty to keep the old password</string>
+    <string name="no_reports">No Reports</string>
+    <string name="week_">Week #</string>
+    <string name="avg_speed">Avg. Speed: </string>
+    <string name="m_min">m/min</string>
+    <string name="m">m</string>
+    <string name="min">min</string>
+    <string name="dot">.</string>
+
 
     <string name="menu_add_item">Add</string>
     <string name="menu_add_time">Add Time</string>

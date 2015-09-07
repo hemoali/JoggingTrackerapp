@@ -53,7 +53,7 @@ public class DeleteUser extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startUsersStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startUsersStopWatch(this, 10000);
 
     }
 

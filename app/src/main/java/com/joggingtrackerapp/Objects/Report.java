@@ -8,8 +8,8 @@ import java.io.Serializable;
  * Created by ibrahimradwan on 9/5/15.
  */
 public class Report implements Serializable {
-    String distance, time, avgSpeed, timesCount;
-    int no;
+    private String distance, time, avgSpeed, timesCount;
+    private int no;
 
     public int getNo () {
         return no;

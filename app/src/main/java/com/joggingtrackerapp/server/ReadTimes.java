@@ -67,7 +67,7 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000);
 
     }
 
@@ -135,11 +135,11 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
 
             ArrayList<Time> allTimes = Parse.parseTimes(context, result);
             if (context instanceof MainActivityForUsers) {
-                ((MainActivityForUsers) context).fillTimesListView(allTimes, false);
+                MainActivityForUsers.fillTimesListView(allTimes, false);
             } else if (context instanceof MainActivityForManagers) {
-                timesFragment.fillTimesListView(allTimes, false);
+                TimesFragment.fillTimesListView(allTimes, false);
             } else if (context instanceof MainActivityForUsers_AdminsView) {
-                ((MainActivityForUsers_AdminsView) context).fillTimesListView(allTimes, false);
+                MainActivityForUsers_AdminsView.fillTimesListView(allTimes, false);
             }
         }
 

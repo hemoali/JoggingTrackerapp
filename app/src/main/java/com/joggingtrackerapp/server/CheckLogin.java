@@ -31,9 +31,7 @@ import java.net.URL;
 import static com.joggingtrackerapp.utils.Constants.API_URL;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
-/**
- * Created by ibrahimradwan on 9/2/15.
- */
+
 public class CheckLogin extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
@@ -52,7 +50,7 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000);
 
     }
 

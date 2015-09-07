@@ -22,6 +22,9 @@ import com.joggingtrackerapp.Objects.Time;
 import com.joggingtrackerapp.R;
 import com.joggingtrackerapp.server.DeleteTime;
 import com.joggingtrackerapp.server.EditTime;
+import com.joggingtrackerapp.utils.Checks;
+import com.joggingtrackerapp.utils.Constants;
+import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -204,7 +207,12 @@ public class TimesAdapter extends BaseAdapter {
                                 dateStr.trim().equals("") || dateStr == null) {
                             Toast.makeText(context, "All Fields Are Required", Toast.LENGTH_SHORT).show();
 
+                        } else if (Integer.parseInt(timeStr) == 0 || Integer.parseInt(distanceStr) == 0 || !Checks.isNumeric(timeStr) || !Checks.isNumeric(distanceStr)) {
+                            Toast.makeText(context, "Invalid Values", Toast.LENGTH_SHORT).show();
+                        } else if (dateStr.compareTo(MyPreferences.getString(context, Constants.PREF_REG_DATE)) < 0) {
+                            Toast.makeText(context, "Invalid Date", Toast.LENGTH_SHORT).show();
                         } else {
+
                             new EditTime(context, editTimeDialog).execute(dateStr, timeStr, distanceStr, currentTime.getId(), String.valueOf(position));
                         }
                     }

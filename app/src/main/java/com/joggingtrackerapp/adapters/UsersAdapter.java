@@ -41,7 +41,7 @@ public class UsersAdapter extends BaseAdapter {
 
     public UsersAdapter (Context c, ArrayList<User> allUsers) {
         context = c;
-        this.allUsers = allUsers;
+        UsersAdapter.allUsers = allUsers;
     }
 
 

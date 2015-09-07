@@ -32,9 +32,6 @@ import java.net.URL;
 import static com.joggingtrackerapp.utils.Constants.API_URL;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
-/**
- * Created by ibrahimradwan on 9/2/15.
- */
 public class AddUser extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
@@ -53,7 +50,7 @@ public class AddUser extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startUsersStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startUsersStopWatch(this, 10000);
     }
 
     @Override
@@ -127,7 +124,7 @@ public class AddUser extends AsyncTask<String, Void, String> {
                 
                 if (context instanceof MainActivityForManagers) {
                     UsersFragment.addRecordToLV(u);
-                    ((MainActivityForManagers) context).dismissAddUserDialog();
+                    MainActivityForManagers.dismissAddUserDialog();
                 }
             } else {
                 Toast.makeText(context, addData[1], Toast.LENGTH_SHORT).show();

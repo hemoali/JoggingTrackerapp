@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="m"
+                    android:text="@string/m"
                     android:textSize="10sp" />
             </LinearLayout>
 
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="min"
+                    android:text="@string/min"
                     android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="Avg. Speed: "
+                    android:text="@string/avg_speed"
                     android:textSize="13sp" />
 
                 <TextView
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="m/min"
+                    android:text="@string/m_min"
                     android:textSize="10sp" />
 
             </LinearLayout>

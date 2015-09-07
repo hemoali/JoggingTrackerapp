@@ -34,7 +34,7 @@ public class Utils {
 
     public static void moveAfterLoginOrSignup (Context context, Class<?> nextClass, boolean finish) {
         Intent intent = new Intent(context, nextClass);
-        ((Activity) context).startActivity(intent);
+        context.startActivity(intent);
         if (finish) ((Activity) context).finish();
     }
 
@@ -166,9 +166,8 @@ public class Utils {
 
                 break;
         }
-        String finalDate = month + " " + Day + ", " + Year;
 
-        return finalDate;
+        return month + " " + Day + ", " + Year;
 
     }
 

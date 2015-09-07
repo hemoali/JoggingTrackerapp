@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_weight="1"
-            android:text="Week #"
+            android:text="@string/week_"
             android:textColor="#660000"
             android:textSize="25sp"
             android:textStyle="bold"/>
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:text="Avg. Speed: "
+                    android:text="@string/avg_speed"
                     android:textSize="13sp"/>
 
                 <LinearLayout
@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:fontFamily="sans-serif-light"
-                        android:text="m/min"
+                        android:text="@string/m_min"
                         android:textSize="10sp"/>
                 </LinearLayout>
 
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="m"
+                    android:text="@string/m"
                     android:textSize="10sp"/>
             </LinearLayout>
         </LinearLayout>

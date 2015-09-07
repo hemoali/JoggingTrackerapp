@@ -1,6 +1,5 @@
 package com.joggingtrackerapp.utils;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 
@@ -20,7 +19,7 @@ public class InternetConnectionsTimeout {
     private static Handler timesHandler, usersHandler;
     private static Runnable timesRunnable, usersRunnable;
 
-    public static void startTimesStopWatch (final AsyncTask asyncTask, int timeout, Context context) {
+    public static void startTimesStopWatch (final AsyncTask asyncTask, int timeout) {
         timesHandler = new Handler();
         timesRunnable = new Runnable() {
             @Override
@@ -45,7 +44,7 @@ public class InternetConnectionsTimeout {
         timesHandler.removeCallbacks(timesRunnable);
     }
 
-    public static void startUsersStopWatch (final AsyncTask asyncTask, int timeout, Context context) {
+    public static void startUsersStopWatch (final AsyncTask asyncTask, int timeout) {
         usersHandler = new Handler();
         usersRunnable = new Runnable() {
             @Override

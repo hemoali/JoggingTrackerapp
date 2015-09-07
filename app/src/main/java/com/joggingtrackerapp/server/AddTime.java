@@ -34,9 +34,6 @@ import java.net.URL;
 import static com.joggingtrackerapp.utils.Constants.API_URL;
 import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 
-/**
- * Created by ibrahimradwan on 9/2/15.
- */
 public class AddTime extends AsyncTask<String, Void, String> {
     private ProgressDialog pd;
     private Context context;
@@ -60,7 +57,7 @@ public class AddTime extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
 
-        InternetConnectionsTimeout.startTimesStopWatch(this, 10000, context);
+        InternetConnectionsTimeout.startTimesStopWatch(this, 10000);
     }
 
     @Override
@@ -142,14 +139,14 @@ public class AddTime extends AsyncTask<String, Void, String> {
 
                 if (context instanceof MainActivityForUsers) {
 
-                    ((MainActivityForUsers) context).addRecordToLV(t);
-                    ((MainActivityForUsers) context).dismissAddTimeDialog();
+                    MainActivityForUsers.addRecordToLV(t);
+                    MainActivityForUsers.dismissAddTimeDialog();
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.addRecordToLV(t);
-                    ((MainActivityForManagers) context).dismissAddTimeDialog();
+                    MainActivityForManagers.dismissAddTimeDialog();
                 } else if (context instanceof MainActivityForUsers_AdminsView) {
-                    ((MainActivityForUsers_AdminsView) context).addRecordToLV(t);
-                    ((MainActivityForUsers_AdminsView) context).dismissAddTimeDialog();
+                    MainActivityForUsers_AdminsView.addRecordToLV(t);
+                    MainActivityForUsers_AdminsView.dismissAddTimeDialog();
                 }
 
 
