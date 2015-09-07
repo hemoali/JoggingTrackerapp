@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +32,7 @@ import java.util.Comparator;
 /**
  * Created by ibrahimradwan on 9/3/15.
  */
-public class MainActivityForUsers extends AppCompatActivity {
+public class MainActivityForUsers extends CommonActivity {
     private static ReportAdapter reportAdapter;
     private static ListView listview_times;
     private static TimesAdapter adapter;
@@ -45,8 +44,6 @@ public class MainActivityForUsers extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         activity = this;
         setContentView(R.layout.activity_main_for_users);
 
@@ -64,7 +61,7 @@ public class MainActivityForUsers extends AppCompatActivity {
             Time time = allTimes.get(i);
             long daysInBetween = Utils.getDaysInBetween(time.getDate(), activity);
             int weekNo = (int) Math.ceil(daysInBetween / 7.0);
-
+            if (weekNo == 0) weekNo = 1;
             boolean weekCreated = false;
             Report oldReport = null;
             for (Report r : allReports) {
@@ -94,7 +91,7 @@ public class MainActivityForUsers extends AppCompatActivity {
         Collections.sort(allReports, new Comparator<Report>() {
             @Override
             public int compare (Report p1, Report p2) {
-                return  p2.getNo() - p1.getNo();
+                return p2.getNo() - p1.getNo();
             }
 
         });
@@ -104,11 +101,13 @@ public class MainActivityForUsers extends AppCompatActivity {
 
     public static void removeRecordFromLV (int position) {
         allTimes.remove(position);
+        fillReportsListView(allTimes);
         adapter.notifyDataSetChanged();
     }
 
     public static void addRecordToLV (Time time) {
         allTimes.add(0, time);
+        fillReportsListView(allTimes);
         adapter.notifyDataSetChanged();
     }
 
@@ -120,7 +119,7 @@ public class MainActivityForUsers extends AppCompatActivity {
         oldTime.setDistance(t.getDistance());
         allTimes.set(position, oldTime);
         adapter.notifyDataSetChanged();
-
+        fillReportsListView(allTimes);
     }
 
     public static void fillTimesListView (ArrayList<Time> allTimes, boolean filterEnabled) {
@@ -210,9 +209,7 @@ public class MainActivityForUsers extends AppCompatActivity {
                 filterTimesDialogBuilder.setView(filterView);
                 filterTimesDialogBuilder.setCancelable(true);
 
-                // Listeners
                 Button filterItems = (Button) filterView.findViewById(R.id.filter);
-                Button cancelFilter = (Button) filterView.findViewById(R.id.cancel);
                 Button resetFilter = (Button) filterView.findViewById(R.id.reset);
                 final ImageView switchDatePicker = (ImageView) filterView.findViewById(R.id.switchDatePicker);
                 final DatePicker fromDate = (DatePicker) filterView.findViewById(R.id.fromDate);
@@ -255,12 +252,6 @@ public class MainActivityForUsers extends AppCompatActivity {
                             fillTimesListView(filteredItems, true);
                             filterTimesDialog.dismiss();
                         }
-                    }
-                });
-                cancelFilter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick (View v) {
-                        filterTimesDialog.dismiss();
                     }
                 });
                 resetFilter.setOnClickListener(new View.OnClickListener() {

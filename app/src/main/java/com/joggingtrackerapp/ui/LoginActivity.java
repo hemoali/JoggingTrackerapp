@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -85,6 +86,9 @@ public class LoginActivity extends Activity {
         passET = (EditText) findViewById(R.id.pass);
         pass2ET = (EditText) findViewById(R.id.pass2);
         levelSp = (Spinner) findViewById(R.id.level);
+
+        passET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
     }
 
     public void changeForm (View v) {
@@ -96,6 +100,7 @@ public class LoginActivity extends Activity {
             pass2ET.setText("");
             passET.setText("");
             emailET.setText("");
+            emailET.requestFocus();
         } else {
             changeFormTV.setText(getResources().getString(R.string.login));
             submitFormBT.setText(getResources().getString(R.string.signup));
@@ -104,6 +109,8 @@ public class LoginActivity extends Activity {
             pass2ET.setText("");
             passET.setText("");
             emailET.setText("");
+            emailET.requestFocus();
+
         }
         isSignUpFormVisible = !isSignUpFormVisible;
     }

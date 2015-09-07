@@ -49,12 +49,15 @@ public class TimesFragment extends Fragment {
 
     public static void removeRecordFromLV (int position) {
         allTimes.remove(position);
+        MainActivityForManagers.fillReportsListView(allTimes);
         adapter.notifyDataSetChanged();
     }
 
     public static void addRecordToLV (Time time) {
         allTimes.add(0, time);
+        MainActivityForManagers.fillReportsListView(allTimes);
         adapter.notifyDataSetChanged();
+
     }
 
     public static void editRecordInLV (Time t, String positionStr) {
@@ -65,6 +68,7 @@ public class TimesFragment extends Fragment {
         oldTime.setDistance(t.getDistance());
         allTimes.set(position, oldTime);
         adapter.notifyDataSetChanged();
+        MainActivityForManagers.fillReportsListView(allTimes);
 
     }
 

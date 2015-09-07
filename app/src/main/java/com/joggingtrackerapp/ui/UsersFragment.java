@@ -53,12 +53,13 @@ public class UsersFragment extends Fragment {
         if (allUsers.size() == 0) {
             no_users_to_update.setVisibility(View.VISIBLE);
             listview_users.setVisibility(View.GONE);
-        }
+        } else {
             no_users_to_update.setVisibility(View.GONE);
             listview_users.setVisibility(View.VISIBLE);
-            UsersFragment.allUsers = allUsers;
-            adapter = new UsersAdapter(activity, allUsers);
-            listview_users.setAdapter(adapter);
+        }
+        UsersFragment.allUsers = allUsers;
+        adapter = new UsersAdapter(activity, allUsers);
+        listview_users.setAdapter(adapter);
 
     }
 

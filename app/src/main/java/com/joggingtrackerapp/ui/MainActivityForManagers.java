@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by ibrahimradwan on 9/3/15.
  */
-public class MainActivityForManagers extends AppCompatActivity {
+public class MainActivityForManagers extends CommonActivity {
     private static ReportAdapter reportAdapter;
     private ViewPager viewPager;
     private SamplePagerAdapter samplePagerAdapter;
@@ -51,8 +51,6 @@ public class MainActivityForManagers extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         activity = this;
 
         setContentView(R.layout.activity_main_for_managers);
@@ -90,6 +88,7 @@ public class MainActivityForManagers extends AppCompatActivity {
             Time time = allTimes.get(i);
             long daysInBetween = Utils.getDaysInBetween(time.getDate(), activity);
             int weekNo = (int) Math.ceil(daysInBetween / 7.0);
+            if (weekNo == 0) weekNo = 1;
 
             boolean weekCreated = false;
             Report oldReport = null;
@@ -120,7 +119,7 @@ public class MainActivityForManagers extends AppCompatActivity {
         Collections.sort(allReports, new Comparator<Report>() {
             @Override
             public int compare (Report p1, Report p2) {
-                return  p2.getNo() - p1.getNo();
+                return p2.getNo() - p1.getNo();
             }
 
         });
@@ -200,14 +199,11 @@ public class MainActivityForManagers extends AppCompatActivity {
                 filterTimesDialogBuilder.setView(filterView);
                 filterTimesDialogBuilder.setCancelable(true);
 
-                // Listeners
                 Button filterItems = (Button) filterView.findViewById(R.id.filter);
-                Button cancelFilter = (Button) filterView.findViewById(R.id.cancel);
                 Button resetFilter = (Button) filterView.findViewById(R.id.reset);
                 final ImageView switchDatePicker = (ImageView) filterView.findViewById(R.id.switchDatePicker);
                 final DatePicker fromDate = (DatePicker) filterView.findViewById(R.id.fromDate);
                 final DatePicker toDate = (DatePicker) filterView.findViewById(R.id.toDate);
-
 
                 switchDatePicker.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -245,12 +241,6 @@ public class MainActivityForManagers extends AppCompatActivity {
                             TimesFragment.fillTimesListView(filteredItems, true);
                             filterTimesDialog.dismiss();
                         }
-                    }
-                });
-                cancelFilter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick (View v) {
-                        filterTimesDialog.dismiss();
                     }
                 });
                 resetFilter.setOnClickListener(new View.OnClickListener() {
@@ -330,5 +320,4 @@ public class MainActivityForManagers extends AppCompatActivity {
     public static void dismissAddUserDialog () {
         addUserDialog.dismiss();
     }
-
 }

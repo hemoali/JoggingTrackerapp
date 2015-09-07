@@ -191,7 +191,7 @@ public class TimesAdapter extends BaseAdapter {
                 time.setText(currentTime.getTime());
                 distance.setText(currentTime.getDistance());
                 date.init(Integer.parseInt(currentTime.getDate().substring(0, 4)),
-                        Integer.parseInt(currentTime.getDate().substring(5, 7)),
+                        Integer.parseInt(currentTime.getDate().substring(5, 7)) - 1,
                         Integer.parseInt(currentTime.getDate().substring(8, 10)), null);
 
                 editItem.setOnClickListener(new View.OnClickListener() {
