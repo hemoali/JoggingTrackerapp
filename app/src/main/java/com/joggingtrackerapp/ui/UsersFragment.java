@@ -49,28 +49,38 @@ public class UsersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public static void fillUsersListView (ArrayList<User> allUsers) {
-        if (allUsers.size() == 0) {
-            no_users_to_update.setVisibility(View.VISIBLE);
-            listview_users.setVisibility(View.GONE);
-        } else {
-            no_users_to_update.setVisibility(View.GONE);
-            listview_users.setVisibility(View.VISIBLE);
+    private static void checkForUsersList () {
+        if (allUsers != null) {
+            if (allUsers.size() == 0) {
+                no_users_to_update.setVisibility(View.VISIBLE);
+                listview_users.setVisibility(View.GONE);
+            } else {
+                no_users_to_update.setVisibility(View.GONE);
+                listview_users.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    public static void fillUsersListView (ArrayList<User> allUsers) {
         UsersFragment.allUsers = allUsers;
         adapter = new UsersAdapter(activity, allUsers);
         listview_users.setAdapter(adapter);
+        checkForUsersList();
 
     }
 
     public static void removeUserFromLV (int position) {
         allUsers.remove(position);
         adapter.notifyDataSetChanged();
+        checkForUsersList();
+
     }
 
     public static void addRecordToLV (User user) {
         allUsers.add(0, user);
         adapter.notifyDataSetChanged();
+        checkForUsersList();
+
     }
 
     public static void editRecordInLV (User u, String positionStr) {

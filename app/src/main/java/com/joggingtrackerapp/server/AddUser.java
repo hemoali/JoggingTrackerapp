@@ -112,7 +112,6 @@ public class AddUser extends AsyncTask<String, Void, String> {
         if (result == null || result.trim().length() <= 0) {
             Toast.makeText(context, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
-
             String[] addData = Parse.parseAddUserData(result);
             if (addData[0].trim().equals("200") && addData[1].trim().equals("User Add Succeeded")) {
                 Toast.makeText(context, "User Added Successfully", Toast.LENGTH_SHORT).show();
@@ -123,6 +122,7 @@ public class AddUser extends AsyncTask<String, Void, String> {
                 u.setLevel(levelStr);
                 
                 if (context instanceof MainActivityForManagers) {
+
                     UsersFragment.addRecordToLV(u);
                     MainActivityForManagers.dismissAddUserDialog();
                 }
