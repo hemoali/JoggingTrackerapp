@@ -18,7 +18,6 @@ import com.joggingtrackerapp.utils.Constants;
 import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
 import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
-import com.joggingtrackerapp.utils.Session;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.io.BufferedWriter;
@@ -75,11 +74,8 @@ public class EditTime extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_SESSION_ID) + ":" + MyPreferences.getString(context, Constants.PREF_API_KEY));
+            conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_API_KEY));
 
-            if (Session.getsCookie(context) != null && Session.getsCookie(context).length() > 0) {
-                conn.setRequestProperty("Cookie", Session.getsCookie(context));
-            }
 
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("task", "edit_time")

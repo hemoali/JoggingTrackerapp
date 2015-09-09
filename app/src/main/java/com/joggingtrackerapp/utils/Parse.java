@@ -21,15 +21,14 @@ import static com.joggingtrackerapp.utils.Constants.TAG_ERROR;
 public class Parse {
 
     public static String[] parseSignupData (String result) {
-        String[] SignupData = new String[5];
+        String[] SignupData = new String[4];
         try {
             JSONObject jsonObj = new JSONObject(result);
 
             SignupData[0] = jsonObj.getString("status");
             SignupData[1] = jsonObj.getString("status_message");
-            SignupData[2] = jsonObj.getJSONObject("data").getString("session_id");
-            SignupData[3] = jsonObj.getJSONObject("data").getString("api_key");
-            SignupData[4] = jsonObj.getJSONObject("data").getString("reg_date");
+            SignupData[2] = jsonObj.getJSONObject("data").getString("api_key");
+            SignupData[3] = jsonObj.getJSONObject("data").getString("reg_date");
 
         } catch (JSONException e) {
             Log.e(TAG_ERROR, "Error: " + e.getMessage());
@@ -38,16 +37,15 @@ public class Parse {
     }
 
     public static String[] parseLoginData (String result) {
-        String[] loginData = new String[6];
+        String[] loginData = new String[5];
         try {
             JSONObject jsonObj = new JSONObject(result);
 
             loginData[0] = jsonObj.getString("status");
             loginData[1] = jsonObj.getString("status_message");
-            loginData[2] = jsonObj.getJSONObject("data").getString("session_id");
-            loginData[3] = jsonObj.getJSONObject("data").getString("level");
-            loginData[4] = jsonObj.getJSONObject("data").getString("api_key");
-            loginData[5] = jsonObj.getJSONObject("data").getString("reg_date");
+            loginData[2] = jsonObj.getJSONObject("data").getString("level");
+            loginData[3] = jsonObj.getJSONObject("data").getString("api_key");
+            loginData[4] = jsonObj.getJSONObject("data").getString("reg_date");
 
         } catch (JSONException e) {
             Log.e(TAG_ERROR, "Error: " + e.getMessage());
@@ -68,6 +66,7 @@ public class Parse {
         }
         return deleteData;
     }
+
     public static String[] parseDeleteUserData (String result) {
         String[] deleteData = new String[2];
         try {
@@ -97,6 +96,7 @@ public class Parse {
         }
         return AddData;
     }
+
     public static String[] parseAddUserData (String result) {
         String[] AddData = new String[4];
         try {
@@ -125,6 +125,7 @@ public class Parse {
         }
         return AddData;
     }
+
     public static String[] parseUpdateUserData (String result) {
         String[] AddData = new String[2];
         try {
@@ -138,6 +139,7 @@ public class Parse {
         }
         return AddData;
     }
+
     public static ArrayList<Time> parseTimes (Context context, String result) {
         ArrayList<Time> times = new ArrayList<>();
         try {

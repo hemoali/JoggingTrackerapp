@@ -14,7 +14,6 @@ import com.joggingtrackerapp.utils.Constants;
 import com.joggingtrackerapp.utils.InternetConnectionsTimeout;
 import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
-import com.joggingtrackerapp.utils.Session;
 import com.joggingtrackerapp.utils.Utils;
 
 import java.io.BufferedWriter;
@@ -82,12 +81,6 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
 
             conn.connect();
 
-            String cookie = conn.getHeaderField("set-cookie");
-            //Get Cookie from connection
-            if (cookie != null && cookie.length() > 0) {
-                Session.setsCookie(context, cookie);
-            }
-
             InputStream in = conn.getInputStream();
 
             return Utils.convertStreamToString(in);
@@ -119,10 +112,9 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
                     if (!loginData[2].trim().equals("") && loginData[2] != null) {
                         Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show();
                         MyPreferences.add(context, Constants.PREF_EMAIL, emailStr, "string");
-                        MyPreferences.add(context, Constants.PREF_SESSION_ID, loginData[2], "string");
-                        MyPreferences.add(context, Constants.PREF_LEVEL, loginData[3], "string");
-                        MyPreferences.add(context, Constants.PREF_API_KEY, loginData[4], "string");
-                        MyPreferences.add(context, Constants.PREF_REG_DATE, loginData[5], "string");
+                        MyPreferences.add(context, Constants.PREF_LEVEL, loginData[2], "string");
+                        MyPreferences.add(context, Constants.PREF_API_KEY, loginData[3], "string");
+                        MyPreferences.add(context, Constants.PREF_REG_DATE, loginData[4], "string");
 
                         Utils.moveAfterLoginOrSignup(context, (loginData[3].equals("2")) ? MainActivityForUsers.class : MainActivityForManagers.class, true);
 
