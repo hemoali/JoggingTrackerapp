@@ -2,7 +2,6 @@ package com.joggingtrackerapp.server;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,11 +18,8 @@ import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
 import com.joggingtrackerapp.utils.Utils;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -74,31 +70,18 @@ public class ReadTimes extends AsyncTask<String, Void, String> {
     protected String doInBackground (String... params) {
         if (!Checks.isNetworkAvailable(context)) return null;
         try {
-            URL url = new URL(API_URL);
+            URL url = null;
+            if (userID.trim().equals("0")) {
+                url = new URL(API_URL + "times");
+            } else {
+                url = new URL(API_URL + "times/" + userID);
+            }
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             conn.setRequestProperty("Connection", "keep-alive");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_API_KEY));
-
-            Uri.Builder builder;
-            if (userID.trim().equals("0")) {
-                builder = new Uri.Builder()
-                        .appendQueryParameter("task", "getTimes");
-            } else {
-                builder = new Uri.Builder()
-                        .appendQueryParameter("task", "getTimes_ForAdmin")
-                        .appendQueryParameter("user_id", userID);
-            }
-            String query = builder.build().getEncodedQuery();
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
-            os.close();
 
             conn.connect();
 

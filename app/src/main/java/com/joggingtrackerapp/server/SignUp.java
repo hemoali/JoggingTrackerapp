@@ -61,13 +61,12 @@ public class SignUp extends AsyncTask<String, Void, String> {
         String passStr = params[1];
         levelStr = params[2];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL+"register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "register")
                     .appendQueryParameter("email", emailStr)
                     .appendQueryParameter("level", levelStr)
                     .appendQueryParameter("pass", passStr);

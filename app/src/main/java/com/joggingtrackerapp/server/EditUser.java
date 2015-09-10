@@ -3,7 +3,6 @@ package com.joggingtrackerapp.server;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,11 +17,9 @@ import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
 import com.joggingtrackerapp.utils.Utils;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -72,28 +69,16 @@ public class EditUser extends AsyncTask<String, Void, String> {
         userIDStr = params[2];
         position = params[3];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL + "users/" + userIDStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("PATCH");
             conn.setRequestProperty("Connection", "keep-alive");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_API_KEY));
-
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "edit_user")
-                    .appendQueryParameter("user_id", userIDStr)
-                    .appendQueryParameter("email", emailStr)
-                    .appendQueryParameter("pass", passStr)
-                    .appendQueryParameter("level", levelStr);
-
-            String query = builder.build().getEncodedQuery();
-
+            String str = " { \"email\": \"" + emailStr + "\", \"pass\": \"" + passStr + "\", \"level\": \"" + levelStr + "\" }";
+            byte[] outputInBytes = str.getBytes("UTF-8");
             OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
+            os.write(outputInBytes);
             os.close();
 
             conn.connect();

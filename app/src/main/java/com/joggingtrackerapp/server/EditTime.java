@@ -3,7 +3,6 @@ package com.joggingtrackerapp.server;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,11 +19,9 @@ import com.joggingtrackerapp.utils.MyPreferences;
 import com.joggingtrackerapp.utils.Parse;
 import com.joggingtrackerapp.utils.Utils;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -69,30 +66,19 @@ public class EditTime extends AsyncTask<String, Void, String> {
         timeIDStr = params[3];
         position = params[4];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL + "times/" + timeIDStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("PATCH");
             conn.setRequestProperty("Connection", "keep-alive");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_API_KEY));
 
-
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "edit_time")
-                    .appendQueryParameter("time_id", timeIDStr)
-                    .appendQueryParameter("date", dateStr)
-                    .appendQueryParameter("time", timeStr)
-                    .appendQueryParameter("distance", distanceStr);
-
-            String query = builder.build().getEncodedQuery();
-
+            String str = " { \"date\": \"" + dateStr + "\", \"time\": \"" + timeStr + "\", \"distance\": \"" + distanceStr + "\" }";
+            byte[] outputInBytes = str.getBytes("UTF-8");
             OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
+            os.write(outputInBytes);
             os.close();
+
 
             conn.connect();
 
@@ -133,7 +119,7 @@ public class EditTime extends AsyncTask<String, Void, String> {
                     ((MainActivityForUsers) context).editRecordInLV(t, position);
                 } else if (context instanceof MainActivityForManagers) {
                     TimesFragment.editRecordInLV(t, position);
-                }else if (context instanceof MainActivityForUsers_AdminsView) {
+                } else if (context instanceof MainActivityForUsers_AdminsView) {
                     ((MainActivityForUsers_AdminsView) context).editRecordInLV(t, position);
                 }
                 editTimeDialog.dismiss();

@@ -59,13 +59,12 @@ public class CheckLogin extends AsyncTask<String, Void, String> {
         emailStr = params[0];
         String passStr = params[1];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL + "login");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "login")
                     .appendQueryParameter("email", emailStr)
                     .appendQueryParameter("pass", passStr);
 

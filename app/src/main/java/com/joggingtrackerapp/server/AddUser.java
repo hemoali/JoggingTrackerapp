@@ -59,7 +59,7 @@ public class AddUser extends AsyncTask<String, Void, String> {
         passStr = params[1];
         levelStr = params[2];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL+"users");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
@@ -67,7 +67,6 @@ public class AddUser extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Authorization", MyPreferences.getString(context, Constants.PREF_API_KEY));
 
             Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("task", "add_user")
                     .appendQueryParameter("email", emailStr)
                     .appendQueryParameter("pass", passStr)
                     .appendQueryParameter("level", levelStr);

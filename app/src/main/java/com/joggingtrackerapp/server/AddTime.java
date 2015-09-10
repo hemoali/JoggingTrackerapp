@@ -66,7 +66,7 @@ public class AddTime extends AsyncTask<String, Void, String> {
         timeStr = params[1];
         distanceStr = params[2];
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL+"times");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "keep-alive");
@@ -76,13 +76,11 @@ public class AddTime extends AsyncTask<String, Void, String> {
             Uri.Builder builder;
             if (userID.trim().equals("0")) {
                 builder = new Uri.Builder()
-                        .appendQueryParameter("task", "add_time")
                         .appendQueryParameter("date", dateStr)
                         .appendQueryParameter("time", timeStr)
                         .appendQueryParameter("distance", distanceStr);
             } else {
                 builder = new Uri.Builder()
-                        .appendQueryParameter("task", "add_time_admin")
                         .appendQueryParameter("user_id", userID)
                         .appendQueryParameter("date", dateStr)
                         .appendQueryParameter("time", timeStr)
